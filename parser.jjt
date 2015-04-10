@@ -1,0 +1,76 @@
+PARSER_BEGIN(Bibtex2Html)
+
+	public class Bibtex2Html {
+		public static void main(String args[]) throws ParseException {
+
+			Bibtex2Html parser = new Bibtex2Html(System.in);
+			SimpleNode node = parser.Parse();
+			node.dump("");
+		}
+	}
+
+PARSER_END(Bibtex2Html)
+
+SKIP :
+{
+	" " | "\t" | "\r"
+}
+
+TOKEN :
+{
+	< INTEGER : (["0" - "9"])+ >
+	| < LF : "\n" >
+	| < OPEN_BRACKET : "{" >
+	| < CLOSE_BRACKET : "}" >
+	| < QUOTE : "\"" >
+	| < EQUAL : "=" >
+	| < COMMA : "," >
+
+	| < ARTICLE : "@article" >
+	| < BOOK : "@book" >
+	| < BOOKLET : "@booklet" >
+	| < CONFERENCE : "@conference" >
+	| < INBOOK : "@inbook" >
+	| < INCOLLECTION : "@incollection" >
+	| < INPROCEEDINGS : "@inproceedings" >
+	| < MANUAL : "@manual" >
+	| < MASTERSTHESIS : "@mastersthesis" >
+	| < MISC : "@misc" >
+	| < PHDTHESIS : "@phdthesis" >
+	| < PROCEEDINGS : "@proceedings" >
+	| < TECHREPORT : "@techreport" >
+	| < UNPUBLISHED : "@unpublished" >
+
+	| < TITLE : "title" >
+	| < AUTHOR : "author" >
+	| < JOURNAL : "journal" >
+	| < YEAR : "year" >
+	| < VOLUME : "volume" >
+	| < NUMBER : "number" >
+	| < PAGES : "pages" >
+	| < MONTH : "month" > 
+	| < NOTE : "note" > 
+	| < KEY : "key" >
+	| < EDITOR : "editor" >
+	| < PUBLISHER : "publisher" >
+	| < SERIES : "series" >
+	| < ADDRESS : "address" >
+	| < EDITION : "edition" >
+	| < HOWPUBLISHED : "howpublished" >
+	| < CHAPTER : "chapter" > 
+	| < TYPE : "type" >
+	| < BOOKTITLE : "booktitle" >
+	| < ORGANIZATION : "organization" >
+	| < SCHOOL : "school" >
+	| < INSTITUTION : "institution" >
+	| < ANNOTE : "anote" >
+	| < CROSSREF : "crossref" >
+}
+
+SimpleNode Parse(): {}{
+	Article() <LF> {return jjtThis;}
+}
+
+void Article(): {} {
+	<ARTICLE> <OPEN_BRACKET> <CLOSE_BRACKET>
+}
