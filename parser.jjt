@@ -1,11 +1,19 @@
 PARSER_BEGIN(Bibtex2Html)
 
+	import java.io.FileInputStream;
+
 	public class Bibtex2Html {
 		public static void main(String args[]) throws ParseException {
 
-			Bibtex2Html parser = new Bibtex2Html(System.in);
-			SimpleNode node = parser.Parse();
-			node.dump("");
+			try {
+				Bibtex2Html parser = new Bibtex2Html(new FileInputStream("bibtex.txt"));
+				SimpleNode node = parser.Parse();
+				node.dump("");
+			} catch(java.io.FileNotFoundException e) {
+          		System.out.println ("File not found.");
+          		return;
+        	}			
+			
 		}
 	}
 
@@ -18,8 +26,7 @@ SKIP :
 
 TOKEN :
 {
-	< INTEGER : (["0" - "9"])+ >
-	| < LF : "\n" >
+	< LF : "\n" >
 	| < OPEN_BRACKET : "{" >
 	| < CLOSE_BRACKET : "}" >
 	| < QUOTE : "\"" >
@@ -65,6 +72,8 @@ TOKEN :
 	| < INSTITUTION : "institution" >
 	| < ANNOTE : "anote" >
 	| < CROSSREF : "crossref" >
+	| < INTEGER : (["0" - "9"])+ >
+	| < STRING : (["a" - "z" , "A"-"Z" , "0" - "9", " "])+ >
 }
 
 SimpleNode Parse(): {}{
@@ -72,5 +81,50 @@ SimpleNode Parse(): {}{
 }
 
 void Article(): {} {
-	<ARTICLE> <OPEN_BRACKET> <CLOSE_BRACKET>
+	<ARTICLE>
+	<OPEN_BRACKET>
+		Id() <LF>
+		Title() <LF>
+		Author() <LF>
+		Year() <LF>
+		Volume() <LF>
+	<CLOSE_BRACKET>
+}
+
+void Id(): {Token id = null;} {
+	id = <STRING>
+	{ System.out.println("id=" + id.image); }
+}
+
+void Title(): {Token title = null;} {
+	<TITLE><EQUAL><OPEN_BRACKET>
+	title = <STRING>
+	<CLOSE_BRACKET>
+	{ System.out.println("title=" + title.image); }
+}
+
+void Author(): {Token author = null;} {
+	<AUTHOR><EQUAL><OPEN_BRACKET>
+	author = <STRING>
+	<CLOSE_BRACKET>
+	{ System.out.println("author=" + author.image); }
+}
+
+void Journal(): {Token journal = null;} {
+	<JOURNAL><EQUAL><OPEN_BRACKET>
+	journal = <STRING>
+	<CLOSE_BRACKET>
+	{ System.out.println("journal=" + journal.image); }
+}
+
+void Year(): {Token year = null;} {
+	<YEAR><EQUAL>
+	year = <INTEGER>
+	{ System.out.println("year=" + year.image); }
+}
+
+void Volume(): {Token volume = null;} {
+	<VOLUME><EQUAL>
+	volume = <INTEGER>
+	{ System.out.println("volume=" + volume.image); }
 }
