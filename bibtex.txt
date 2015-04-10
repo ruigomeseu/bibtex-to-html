@@ -1,6 +1,10 @@
-@article{melo
-	title={asura}
-	author={le Autor}
-	year=1994
-	volume=1
+@article{adcox2005formation,
+  title={Formation of dense partonic matter in relativistic nucleus--nucleus collisions at RHIC: Experimental evaluation by the PHENIX Collaboration},
+  author={Melo},
+  journal={Nuclear Physics A},
+  volume={757},
+  number={1},
+  pages={184--283},
+  year={2005},
+  publisher={Elsevier}
 }

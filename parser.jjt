@@ -70,7 +70,7 @@ TOKEN :
 	| < ORGANIZATION : "organization" >
 	| < SCHOOL : "school" >
 	| < INSTITUTION : "institution" >
-	| < ANNOTE : "anote" >
+	| < ANNOTE : "annote" >
 	| < CROSSREF : "crossref" >
 	| < INTEGER : (["0" - "9"])+ >
 	| < STRING : (["a" - "z" , "A"-"Z" , "0" - "9", " "])+ >
@@ -83,11 +83,15 @@ SimpleNode Parse(): {}{
 void Article(): {} {
 	<ARTICLE>
 	<OPEN_BRACKET>
-		Id() <LF>
-		Title() <LF>
-		Author() <LF>
-		Year() <LF>
-		Volume() <LF>
+		Id() <COMMA> <LF>
+		Title() <COMMA> <LF>
+		Author() <COMMA> <LF>
+		Journal() <COMMA> <LF>
+		Volume() <COMMA> <LF>
+		Number() <COMMA> <LF>
+		Pages() <COMMA> <LF>
+		Year() <COMMA> <LF>
+		Publisher() <COMMA> <LF>
 	<CLOSE_BRACKET>
 }
 
@@ -119,12 +123,24 @@ void Journal(): {Token journal = null;} {
 
 void Year(): {Token year = null;} {
 	<YEAR><EQUAL>
-	year = <INTEGER>
+	<OPEN_BRACKET> year = <INTEGER> <CLOSE_BRACKET> | year = <INTEGER>
 	{ System.out.println("year=" + year.image); }
 }
 
 void Volume(): {Token volume = null;} {
 	<VOLUME><EQUAL>
-	volume = <INTEGER>
+	<OPEN_BRACKET> volume = <INTEGER> <CLOSE_BRACKET> | volume = <INTEGER>
 	{ System.out.println("volume=" + volume.image); }
+}
+
+void Number(): {Token number = null;} {
+	<NUMBER><EQUAL>
+	<OPEN_BRACKET> number = <INTEGER> <CLOSE_BRACKET> | number = <INTEGER>
+	{ System.out.println("number=" + number.image); }
+}
+
+void Publisher(): {Token publisher = null;} {
+	<PUBLISHER><EQUAL>
+	<OPEN_BRACKET> publisher = <STRING> <CLOSE_BRACKET> | publisher = <STRING>
+	{ System.out.println("publisher=" + publisher.image); }
 }
