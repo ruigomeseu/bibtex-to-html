@@ -123,24 +123,30 @@ void Journal(): {Token journal = null;} {
 
 void Year(): {Token year = null;} {
 	<YEAR><EQUAL>
-	<OPEN_BRACKET> year = <INTEGER> <CLOSE_BRACKET> | year = <INTEGER>
+	<OPEN_BRACKET> year = <INTEGER> <CLOSE_BRACKET> 
 	{ System.out.println("year=" + year.image); }
 }
 
 void Volume(): {Token volume = null;} {
 	<VOLUME><EQUAL>
-	<OPEN_BRACKET> volume = <INTEGER> <CLOSE_BRACKET> | volume = <INTEGER>
+	<OPEN_BRACKET> volume = <INTEGER> <CLOSE_BRACKET> 
 	{ System.out.println("volume=" + volume.image); }
+}
+
+void Pages(): {Token pages = null;} {
+	<PAGES><EQUAL>
+	<OPEN_BRACKET> pages = <INTEGER> <CLOSE_BRACKET> 
+	{ System.out.println("pages=" + pages.image); }
 }
 
 void Number(): {Token number = null;} {
 	<NUMBER><EQUAL>
-	<OPEN_BRACKET> number = <INTEGER> <CLOSE_BRACKET> | number = <INTEGER>
+	<OPEN_BRACKET> number = <INTEGER> <CLOSE_BRACKET> 
 	{ System.out.println("number=" + number.image); }
 }
 
 void Publisher(): {Token publisher = null;} {
 	<PUBLISHER><EQUAL>
-	<OPEN_BRACKET> publisher = <STRING> <CLOSE_BRACKET> | publisher = <STRING>
+	<OPEN_BRACKET> publisher = <STRING> <CLOSE_BRACKET> 
 	{ System.out.println("publisher=" + publisher.image); }
 }

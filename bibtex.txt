@@ -1,10 +1,10 @@
 @article{adcox2005formation,
-  title={Formation of dense partonic matter in relativistic nucleus--nucleus collisions at RHIC: Experimental evaluation by the PHENIX Collaboration},
-  author={Melo},
-  journal={Nuclear Physics A},
-  volume={757},
-  number={1},
-  pages={184--283},
-  year={2005},
-  publisher={Elsevier}
+	title={Formation of dense partonic matter in relativistic nucleus collisions at RHIC Experimental evaluation by the PHENIX Collaboration},
+	author={Melo},
+	journal={Nuclear Physics A},
+	volume={757},
+	number={1},
+	pages={184},
+	year={2005},
+	publisher={Elsevier},
 }
