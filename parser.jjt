@@ -21,17 +21,19 @@ PARSER_END(Bibtex2Html)
 
 SKIP :
 {
-	" " | "\t" | "\r"
+	"\t" | "\r"
 }
 
 TOKEN :
 {
 	< LF : "\n" >
+	| < WS: ([" ","\r","\t"])+ >
 	| < OPEN_BRACKET : "{" >
 	| < CLOSE_BRACKET : "}" >
 	| < QUOTE : "\"" >
 	| < EQUAL : "=" >
 	| < COMMA : "," >
+	
 
 	| < ARTICLE : "@article" >
 	| < BOOK : "@book" >
@@ -72,8 +74,14 @@ TOKEN :
 	| < INSTITUTION : "institution" >
 	| < ANNOTE : "annote" >
 	| < CROSSREF : "crossref" >
+
 	| < INTEGER : (["0" - "9"])+ >
-	| < STRING : (["a" - "z" , "A"-"Z" , "0" - "9", " "])+ >
+	| < PAGESNUMBERS : (["0" - "9"])+"--"(["0" - "9"])+ >
+	| < WORD : (["a" - "z" , "A"-"Z" , "0" - "9", "-", ":"] | <SPECIAL>)+ >
+	| < SPECIAL : (["\\", "\/", "\u2018", "\u2019", "\126", "\46", "\61", "\u005E"])+ >
+	| < STRING : ((<WORD>)+(" "<WORD>)*)+ >
+	//| < TEXT : (["a" - "z" , "A"-"Z" , "0" - "9", " ", "-", ":"])
+
 }
 
 SimpleNode Parse(): {}{
@@ -83,70 +91,122 @@ SimpleNode Parse(): {}{
 void Article(): {} {
 	<ARTICLE>
 	<OPEN_BRACKET>
-		Id() <COMMA> <LF>
-		Title() <COMMA> <LF>
-		Author() <COMMA> <LF>
-		Journal() <COMMA> <LF>
-		Volume() <COMMA> <LF>
-		Number() <COMMA> <LF>
-		Pages() <COMMA> <LF>
-		Year() <COMMA> <LF>
-		Publisher() <COMMA> <LF>
+		(
+			[<WS>]
+			(
+				Id() <COMMA> <LF>
+				| Title() <COMMA> <LF>
+				| Author() <COMMA> <LF>
+				| Journal() <COMMA> <LF>
+				| Volume() <COMMA> <LF>
+				| Number() <COMMA> <LF>
+				| Pages() <COMMA> <LF>
+				| Year() <COMMA> <LF>
+				| Publisher() <COMMA> <LF>
+				| Month() <COMMA> <LF>
+			)
+		)+
+		
 	<CLOSE_BRACKET>
 }
 
 void Id(): {Token id = null;} {
-	id = <STRING>
+	(id = <WORD> | id = <STRING>)
 	{ System.out.println("id=" + id.image); }
 }
 
 void Title(): {Token title = null;} {
-	<TITLE><EQUAL><OPEN_BRACKET>
-	title = <STRING>
-	<CLOSE_BRACKET>
+	<TITLE> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>]
+		(title = <WORD> | title = <STRING>)
+		[<WS>] <CLOSE_BRACKET>
+		| (title = <WORD> | title = <STRING>)[<WS>]
+	)
 	{ System.out.println("title=" + title.image); }
 }
 
+void Month(): { Token month = null;} {
+	<MONTH> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>]
+		(month = <INTEGER> )
+		[<WS>] <CLOSE_BRACKET>
+		| (month = <INTEGER>) [<WS>]
+	)
+	{ System.out.println("month=" + month.image); }
+}
+
 void Author(): {Token author = null;} {
-	<AUTHOR><EQUAL><OPEN_BRACKET>
-	author = <STRING>
-	<CLOSE_BRACKET>
+	<AUTHOR> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>]
+		(author =  <WORD> | author = <STRING>)
+		[<WS>] <CLOSE_BRACKET>
+		| (author =  <WORD> | author = <STRING>)[<WS>]
+	)
 	{ System.out.println("author=" + author.image); }
 }
 
 void Journal(): {Token journal = null;} {
-	<JOURNAL><EQUAL><OPEN_BRACKET>
-	journal = <STRING>
-	<CLOSE_BRACKET>
+	<JOURNAL> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>]
+		(journal = <WORD> | journal = <STRING>)
+		[<WS>] <CLOSE_BRACKET>
+		| (journal = <WORD> | journal = <STRING>) [<WS>]
+	)
 	{ System.out.println("journal=" + journal.image); }
 }
 
 void Year(): {Token year = null;} {
-	<YEAR><EQUAL>
-	<OPEN_BRACKET> year = <INTEGER> <CLOSE_BRACKET> 
+	<YEAR> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>] year = <INTEGER> [<WS>] <CLOSE_BRACKET>
+		| year = <INTEGER> [<WS>]
+	)
 	{ System.out.println("year=" + year.image); }
 }
 
 void Volume(): {Token volume = null;} {
-	<VOLUME><EQUAL>
-	<OPEN_BRACKET> volume = <INTEGER> <CLOSE_BRACKET> 
+	<VOLUME> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>] volume = <INTEGER> [<WS>] <CLOSE_BRACKET>
+		| volume = <INTEGER> [<WS>]
+	)
 	{ System.out.println("volume=" + volume.image); }
 }
 
 void Pages(): {Token pages = null;} {
-	<PAGES><EQUAL>
-	<OPEN_BRACKET> pages = <INTEGER> <CLOSE_BRACKET> 
+
+	<PAGES> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>] pages = <PAGESNUMBERS> [<WS>] <CLOSE_BRACKET>
+		| pages = <PAGESNUMBERS> [<WS>]
+	)
 	{ System.out.println("pages=" + pages.image); }
 }
 
 void Number(): {Token number = null;} {
-	<NUMBER><EQUAL>
-	<OPEN_BRACKET> number = <INTEGER> <CLOSE_BRACKET> 
+	<NUMBER> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>] number = <INTEGER> [<WS>] <CLOSE_BRACKET>
+		| number = <INTEGER> [<WS>]
+	)
 	{ System.out.println("number=" + number.image); }
 }
 
 void Publisher(): {Token publisher = null;} {
-	<PUBLISHER><EQUAL>
-	<OPEN_BRACKET> publisher = <STRING> <CLOSE_BRACKET> 
+	<PUBLISHER> SpacedEqual()
+	(
+		<OPEN_BRACKET> [<WS>]
+		( publisher = <WORD> | publisher = <STRING>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( publisher =  <WORD> | publisher = <STRING>) [<WS>]
+	)
 	{ System.out.println("publisher=" + publisher.image); }
+}
+
+void SpacedEqual():{} {
+	[<WS>] <EQUAL> [<WS>]
 }
