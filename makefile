@@ -1,11 +1,14 @@
+name = parser
+
+
 javac : jj
 	javac *.java
 
 jj : jjt
-	javacc parser.jj
+	javacc $(name).jj
 
 jjt :
-	jjtree parser.jjt
+	jjtree $(name).jjt
 
 
 clean :

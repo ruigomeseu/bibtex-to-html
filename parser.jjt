@@ -78,18 +78,34 @@ TOKEN :
 	| < INTEGER : (["0" - "9"])+ >
 	| < PAGESNUMBERS : (["0" - "9"])+"--"(["0" - "9"])+ >
 	| < WORD : (["a" - "z" , "A"-"Z" , "0" - "9", "-", ":"] | <SPECIAL>)+ >
-	| < SPECIAL : (["\\", "\47", "\u2018", "\u2019", "\126", "\46", "\61", "\u005E"])+ >
-	| < STRING : ((<WORD>)+(" "<WORD>)*)+ >
-	//| < TEXT : (["a" - "z" , "A"-"Z" , "0" - "9", " ", "-", ":"])
+	| < SPECIAL : (["\\", "\47", "\u2018", "\u2019", "\126", "\46", "\61", "\u005E" ])+ >
+	| < STRING : ((<WORD>)+((" "|", ")+<WORD>)*)+ >
+	| < TEXT : (
+		( <STRING> | <WORD> | " " )+
+		( <OPEN_BRACKET> (<WORD>|<STRING>)* <CLOSE_BRACKET> )*
+		( <STRING>)*
+		)+  >
 
 }
 
 SimpleNode Parse(): {}{
-	Article() <LF> {return jjtThis;}
+	(Article()
+		|Book()
+		) <LF> {return jjtThis;}
 }
 
 void Article(): {} {
 	<ARTICLE>
+	Contents()
+}
+
+void Book(): {} {
+	<BOOK>
+	Contents()
+}
+
+
+void Contents(): {}{
 	<OPEN_BRACKET>
 		(
 			[<WS>]
@@ -106,9 +122,9 @@ void Article(): {} {
 				| Month() <COMMA> <LF>
 			)
 		)+
-		
 	<CLOSE_BRACKET>
 }
+
 
 void Id(): {Token id = null;} {
 	(id = <WORD> | id = <STRING>)
@@ -116,10 +132,10 @@ void Id(): {Token id = null;} {
 }
 
 void Title(): {Token title = null;} {
-	<TITLE> SpacedEqual()
+	<TITLE> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>]
-		(title = <WORD> | title = <STRING>)
+		(title = <WORD> | title = <STRING> | title = <TEXT>)
 		[<WS>] <CLOSE_BRACKET>
 		| (title = <WORD> | title = <STRING>)[<WS>]
 	)
@@ -127,7 +143,7 @@ void Title(): {Token title = null;} {
 }
 
 void Month(): { Token month = null;} {
-	<MONTH> SpacedEqual()
+	<MONTH> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>]
 		(month = <INTEGER> )
@@ -137,19 +153,30 @@ void Month(): { Token month = null;} {
 	{ System.out.println("month=" + month.image); }
 }
 
+/*
+First
+Last
+von
+jr
+
+First von Last
+von Last, First
+von Last, Jr ,First
+*/
 void Author(): {Token author = null;} {
-	<AUTHOR> SpacedEqual()
+	<AUTHOR> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>]
 		(author =  <WORD> | author = <STRING>)
 		[<WS>] <CLOSE_BRACKET>
-		| (author =  <WORD> | author = <STRING>)[<WS>]
+		| 
+		(author =  <WORD> | author = <STRING>)[<WS>]
 	)
 	{ System.out.println("author=" + author.image); }
 }
 
 void Journal(): {Token journal = null;} {
-	<JOURNAL> SpacedEqual()
+	<JOURNAL> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>]
 		(journal = <WORD> | journal = <STRING>)
@@ -160,7 +187,7 @@ void Journal(): {Token journal = null;} {
 }
 
 void Year(): {Token year = null;} {
-	<YEAR> SpacedEqual()
+	<YEAR> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>] year = <INTEGER> [<WS>] <CLOSE_BRACKET>
 		| year = <INTEGER> [<WS>]
@@ -169,7 +196,7 @@ void Year(): {Token year = null;} {
 }
 
 void Volume(): {Token volume = null;} {
-	<VOLUME> SpacedEqual()
+	<VOLUME> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>] volume = <INTEGER> [<WS>] <CLOSE_BRACKET>
 		| volume = <INTEGER> [<WS>]
@@ -179,7 +206,7 @@ void Volume(): {Token volume = null;} {
 
 void Pages(): {Token pages = null;} {
 
-	<PAGES> SpacedEqual()
+	<PAGES> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>] pages = <PAGESNUMBERS> [<WS>] <CLOSE_BRACKET>
 		| pages = <PAGESNUMBERS> [<WS>]
@@ -188,7 +215,7 @@ void Pages(): {Token pages = null;} {
 }
 
 void Number(): {Token number = null;} {
-	<NUMBER> SpacedEqual()
+	<NUMBER> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>] number = <INTEGER> [<WS>] <CLOSE_BRACKET>
 		| number = <INTEGER> [<WS>]
@@ -197,7 +224,7 @@ void Number(): {Token number = null;} {
 }
 
 void Publisher(): {Token publisher = null;} {
-	<PUBLISHER> SpacedEqual()
+	<PUBLISHER> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>]
 		( publisher = <WORD> | publisher = <STRING>)
@@ -207,6 +234,6 @@ void Publisher(): {Token publisher = null;} {
 	{ System.out.println("publisher=" + publisher.image); }
 }
 
-void SpacedEqual():{} {
-	[<WS>] <EQUAL> [<WS>]
+void getText(): {} {
+	<STRING> [<OPEN_BRACKET>(<STRING>|<WORD>)<CLOSE_BRACKET>]
 }
