@@ -102,7 +102,7 @@ SimpleNode Parse(): {}{
 }
 
 void Article(): {} {
-	<ARTICLE> //{jjtThis.Op = "Article";}
+	<ARTICLE>
 	Contents()
 }
 
@@ -114,22 +114,35 @@ void Book(): {} {
 
 void Contents(): {}{
 	<OPEN_BRACKET>
+		Id() [<WS>] <COMMA> <LF>
+		(
+				Title()
+				| Author()
+				| Journal()
+				| Volume()
+				| Number()
+				| Pages()
+				| Year()
+				| Publisher()
+				| Month()
+		)
+
 		(
 			[<WS>]
 			(
-				Id() <COMMA> <LF>
-				| Title() <COMMA> <LF>
-				| Author() <COMMA> <LF>
-				| Journal() <COMMA> <LF>
-				| Volume() <COMMA> <LF>
-				| Number() <COMMA> <LF>
-				| Pages() <COMMA> <LF>
-				| Year() <COMMA> <LF>
-				| Publisher() <COMMA> <LF>
-				| Month() <COMMA> <LF>
-				| Note() <COMMA> <LF>
+				 <COMMA> <LF>
+				| Title()
+				| Author()
+				| Journal()
+				| Volume()
+				| Number()
+				| Pages()
+				| Year()
+				| Publisher()
+				| Month()
 			)
-		)+
+		)*
+		[<LF>]
 	<CLOSE_BRACKET>
 }
 
