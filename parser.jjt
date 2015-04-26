@@ -1,5 +1,6 @@
 options {
 	UNICODE_INPUT=true;
+	LOOKAHEAD=1;
 }
 
 PARSER_BEGIN(Bibtex2Html)
@@ -95,9 +96,24 @@ TOKEN :
 }
 
 SimpleNode Parse(): {}{
-	(Article()
-		|Book()
-		) <LF> {return jjtThis;}
+	(	<ARTICLE>
+		| <BOOK>
+		| <BOOKLET>
+		| <CONFERENCE>
+		| <INBOOK>
+		| <INCOLLECTION>
+		| <INPROCEEDINGS>
+		| <MANUAL>
+		| <MASTERSTHESIS>
+		| <MISC>
+		| <PHDTHESIS>
+		| <PROCEEDINGS>
+		| <TECHREPORT>
+		| <UNPUBLISHED>
+	)
+	Contents()
+	<LF>
+	{ return jjtThis;}
 }
 
 void Article(): {} {
