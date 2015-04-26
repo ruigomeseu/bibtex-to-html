@@ -1,6 +1,5 @@
 options {
-	//retira o warning da tabela ascii
-	//UNICODE_INPUT=true;
+	UNICODE_INPUT=true;
 }
 
 PARSER_BEGIN(Bibtex2Html)
@@ -114,36 +113,44 @@ void Book(): {} {
 
 void Contents(): {}{
 	<OPEN_BRACKET>
-		Id() [<WS>] <COMMA> <LF>
-		(
-				Title()
-				| Author()
-				| Journal()
-				| Volume()
-				| Number()
-				| Pages()
-				| Year()
-				| Publisher()
-				| Month()
-		)
-
+		Id()
 		(
 			[<WS>]
 			(
 				 <COMMA> <LF>
-				| Title()
-				| Author()
-				| Journal()
-				| Volume()
-				| Number()
-				| Pages()
-				| Year()
-				| Publisher()
-				| Month()
+				| Property()
 			)
 		)*
 		[<LF>]
 	<CLOSE_BRACKET>
+}
+
+void Property(): {} {
+	(	Title()
+		| Author()
+		| Journal()
+		| Volume()
+		| Number()
+		| Pages()
+		| Year()
+		| Publisher()
+		| Month()
+		| Note()
+		| Key()
+		| Editor()
+		| Series()
+		| Address()
+		| Edition()
+		| HowPublished()
+		| Chapter()
+		| Type()
+		| BookTitle()
+		| Organization()
+		| School()
+		| Institution()
+		| Annote()
+		| Crossref()
+	)
 }
 
 
@@ -280,6 +287,176 @@ void Note(): {Token note = null;} {
 	)
 	{ System.out.println("note=" + note.image); }
 }
+
+void Key(): { Token key = null; } {
+	<KEY> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( key = <WORD> | key = <STRING> | key = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( key =  <WORD> | key = <STRING> | key = <TEXT>) [<WS>]
+		| key = btwBrackets()
+	)
+	{ System.out.println("key=" + key.image); }
+}
+
+void Editor(): { Token editor = null; } {
+	<EDITOR> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( editor = <WORD> | editor = <STRING> | editor = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( editor =  <WORD> | editor = <STRING> | editor = <TEXT>) [<WS>]
+		| editor = btwBrackets()
+	)
+	{ System.out.println("editor=" + editor.image); }
+}
+
+void Series(): { Token series = null; } {
+	<SERIES> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( series = <WORD> | series = <STRING> | series = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( series =  <WORD> | series = <STRING> | series = <TEXT>) [<WS>]
+		| series = btwBrackets()
+	)
+	{ System.out.println("series=" + series.image); }
+}
+
+void Address(): { Token address = null; } {
+	<ADDRESS> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( address = <WORD> | address = <STRING> | address = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( address =  <WORD> | address = <STRING> | address = <TEXT>) [<WS>]
+		| address = btwBrackets()
+	)
+	{ System.out.println("address=" + address.image); }
+}
+
+void Edition(): { Token edition = null; } {
+	<EDITION> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( edition = <WORD> | edition = <STRING> | edition = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( edition =  <WORD> | edition = <STRING> | edition = <TEXT>) [<WS>]
+		| edition = btwBrackets()
+	)
+	{ System.out.println("edition=" + edition.image); }
+}
+
+void HowPublished(): { Token howPublished = null; } {
+	<HOWPUBLISHED> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( howPublished = <WORD> | howPublished = <STRING> | howPublished = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( howPublished =  <WORD> | howPublished = <STRING> | howPublished = <TEXT>) [<WS>]
+		| howPublished = btwBrackets()
+	)
+	{ System.out.println("howPublished=" + howPublished.image); }
+}
+
+void Chapter(): { Token chapter = null; } {
+	<CHAPTER> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( chapter = <WORD> | chapter = <STRING> | chapter = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( chapter =  <WORD> | chapter = <STRING> | chapter = <TEXT>) [<WS>]
+		| chapter = btwBrackets()
+	)
+	{ System.out.println("chapter=" + chapter.image); }
+}
+
+void Type(): { Token type = null; } {
+	<TYPE> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( type = <WORD> | type = <STRING> | type = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( type =  <WORD> | type = <STRING> | type = <TEXT>) [<WS>]
+		| type = btwBrackets()
+	)
+	{ System.out.println("type=" + type.image); }
+}
+
+void BookTitle(): { Token bookTitle = null; } {
+	<BOOKTITLE> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( bookTitle = <WORD> | bookTitle = <STRING> | bookTitle = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( bookTitle =  <WORD> | bookTitle = <STRING> | bookTitle = <TEXT>) [<WS>]
+		| bookTitle = btwBrackets()
+	)
+	{ System.out.println("bookTitle=" + bookTitle.image); }
+}
+
+void Organization(): { Token organization = null; } {
+	<ORGANIZATION> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( organization = <WORD> | organization = <STRING> | organization = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( organization =  <WORD> | organization = <STRING> | organization = <TEXT>) [<WS>]
+		| organization = btwBrackets()
+	)
+	{ System.out.println("organization=" + organization.image); }
+}
+
+void School(): { Token school = null; } {
+	<SCHOOL> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( school = <WORD> | school = <STRING> | school = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( school =  <WORD> | school = <STRING> | school = <TEXT>) [<WS>]
+		| school = btwBrackets()
+	)
+	{ System.out.println("school=" + school.image); }
+}
+
+void Institution(): { Token institution = null; } {
+	<INSTITUTION> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( institution = <WORD> | institution = <STRING> | institution = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( institution =  <WORD> | institution = <STRING> | institution = <TEXT>) [<WS>]
+		| institution = btwBrackets()
+	)
+	{ System.out.println("institution=" + institution.image); }
+}
+
+void Annote(): { Token annote = null; } {
+	<ANNOTE> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( annote = <WORD> | annote = <STRING> | annote = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( annote =  <WORD> | annote = <STRING> | annote = <TEXT>) [<WS>]
+		| annote = btwBrackets()
+	)
+	{ System.out.println("annote=" + annote.image); }
+}
+
+void Crossref(): { Token crossref = null; } {
+	<CROSSREF> [<WS>] <EQUAL> [<WS>]
+	(
+		<OPEN_BRACKET> [<WS>]
+		( crossref = <WORD> | crossref = <STRING> | crossref = <TEXT>)
+		[<WS>] <CLOSE_BRACKET>
+		| ( crossref =  <WORD> | crossref = <STRING> | crossref = <TEXT>) [<WS>]
+		| crossref = btwBrackets()
+	)
+	{ System.out.println("crossref=" + crossref.image); }
+}
+
+
 
 /*
 void getText(): {} {
