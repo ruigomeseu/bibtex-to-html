@@ -14,6 +14,7 @@ PARSER_BEGIN(Bibtex2Html)
 				Bibtex2Html parser = new Bibtex2Html(new FileInputStream("bibtex.txt"));
 				SimpleNode node = parser.Parse();
 				node.dump("");
+				System.out.println("Type = " + node.type);
 			} catch(java.io.FileNotFoundException e) {
           		System.out.println ("File not found.");
           		return;
@@ -96,36 +97,25 @@ TOKEN :
 }
 
 SimpleNode Parse(): {}{
-	(	<ARTICLE>
-		| <BOOK>
-		| <BOOKLET>
-		| <CONFERENCE>
-		| <INBOOK>
-		| <INCOLLECTION>
-		| <INPROCEEDINGS>
-		| <MANUAL>
-		| <MASTERSTHESIS>
-		| <MISC>
-		| <PHDTHESIS>
-		| <PROCEEDINGS>
-		| <TECHREPORT>
-		| <UNPUBLISHED>
+	(	<ARTICLE> { jjtThis.type = "article"; }
+		| <BOOK> { jjtThis.type = "book"; }
+		| <BOOKLET> { jjtThis.type = "booklet"; }
+		| <CONFERENCE> { jjtThis.type = "conference"; }
+		| <INBOOK> { jjtThis.type = "inbook"; }
+		| <INCOLLECTION> { jjtThis.type = "incollection"; }
+		| <INPROCEEDINGS> { jjtThis.type = "inproceedings"; }
+		| <MANUAL> { jjtThis.type = "manual"; }
+		| <MASTERSTHESIS> { jjtThis.type = "mastersthesis"; }
+		| <MISC> { jjtThis.type = "misc"; }
+		| <PHDTHESIS> { jjtThis.type = "phdthesis"; }
+		| <PROCEEDINGS> { jjtThis.type = "proceedings"; }
+		| <TECHREPORT> { jjtThis.type = "techreport"; }
+		| <UNPUBLISHED> { jjtThis.type = "unpublished"; }
 	)
 	Contents()
 	<LF>
 	{ return jjtThis;}
 }
-
-void Article(): {} {
-	<ARTICLE>
-	Contents()
-}
-
-void Book(): {} {
-	<BOOK>
-	Contents()
-}
-
 
 void Contents(): {}{
 	<OPEN_BRACKET>

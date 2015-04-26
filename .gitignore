@@ -1,3 +1,5 @@
 *.java
 *.jj
 *.class
+
+!SimpleNode.java
