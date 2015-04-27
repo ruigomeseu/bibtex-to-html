@@ -97,24 +97,78 @@ TOKEN :
 }
 
 SimpleNode Parse(): {}{
-	(	<ARTICLE> { jjtThis.type = "article"; }
-		| <BOOK> { jjtThis.type = "book"; }
-		| <BOOKLET> { jjtThis.type = "booklet"; }
-		| <CONFERENCE> { jjtThis.type = "conference"; }
-		| <INBOOK> { jjtThis.type = "inbook"; }
-		| <INCOLLECTION> { jjtThis.type = "incollection"; }
-		| <INPROCEEDINGS> { jjtThis.type = "inproceedings"; }
-		| <MANUAL> { jjtThis.type = "manual"; }
-		| <MASTERSTHESIS> { jjtThis.type = "mastersthesis"; }
-		| <MISC> { jjtThis.type = "misc"; }
-		| <PHDTHESIS> { jjtThis.type = "phdthesis"; }
-		| <PROCEEDINGS> { jjtThis.type = "proceedings"; }
-		| <TECHREPORT> { jjtThis.type = "techreport"; }
-		| <UNPUBLISHED> { jjtThis.type = "unpublished"; }
+	(	Article()
+		| Book()
+		| Booklet()
+		| Conference()
+		| Inbook()
+		| Incollection()
+		| Inproceedings()
+		| Manual() 
+		| Mastersthesis()
+		| Misc()
+		| Phdthesis()
+		| Proceedings()
+		| Techreport()
+		| Unpublished();
 	)
 	Contents()
 	<LF>
 	{ return jjtThis;}
+}
+
+void Article() {
+	<ARTICLE> { jjtThis.type = "article"; }
+}
+
+void Book() {
+	<BOOK> { jjtThis.type = "book"; }
+}
+void Booklet() {
+	<BOOKLET> { jjtThis.type = "booklet"; }
+}
+
+void Conference() {
+	<CONFERENCE> { jjtThis.type = "conference"; }
+}
+
+void Inbook() {
+	<INBOOK> { jjtThis.type = "inbook"; }
+}
+
+void Incollection() {
+	<INCOLLECTION> { jjtThis.type = "incollection"; }
+}
+
+void Inproceedings() {
+	<INPROCEEDINGS> { jjtThis.type = "inproceedings"; }
+}
+
+void Manual() {
+	<MANUAL> { jjtThis.type = "manual"; }
+}
+
+void Mastersthesis() {
+	 <MASTERSTHESIS> { jjtThis.type = "mastersthesis"; }
+}
+
+void Misc() {
+	<MISC> { jjtThis.type = "misc"; }
+}
+void Phdthesis() {
+	<PHDTHESIS> { jjtThis.type = "phdthesis"; }
+}
+
+void Proceedings() {
+	<PROCEEDINGS> { jjtThis.type = "proceedings"; }
+}
+
+void Techreport() {
+	<TECHREPORT> { jjtThis.type = "techreport"; }
+}
+
+void Unpublished() {
+	<UNPUBLISHED> { jjtThis.type = "unpublished"; }
 }
 
 void Contents(): {}{
