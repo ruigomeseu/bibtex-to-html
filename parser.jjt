@@ -6,8 +6,17 @@ options {
 PARSER_BEGIN(Bibtex2Html)
 
 	import java.io.FileInputStream;
+	import java.util.HashMap;
+	import java.util.Map;
 
 	public class Bibtex2Html {
+
+		public enum PropertyStatus {
+		    REQUIRED,
+		    OPTIONAL,
+		    FOUND
+		}
+
 		public static void main(String args[]) throws ParseException {
 
 			try {
@@ -18,18 +27,35 @@ PARSER_BEGIN(Bibtex2Html)
 			} catch(java.io.FileNotFoundException e) {
           		System.out.println ("File not found.");
           		return;
-        	}			
+        	}
 			
 		}
 
 		public Boolean verifyProperties(String type, SimpleNode node)
 		{
-			if(type.equals("Article"))
-			{
-				//TODO: Pass article tree
-				System.out.println("Should print");
+			HashMap<String, PropertyStatus> hash = getRequiredProperties(type);
+
+			//Loop over the contents tree and update the hashmap with the property status (FOUND)
+			for (int i = 1; i < node.jjtGetNumChildren(); i++) {
+				String property = node.jjtGetChild(i).jjtGetChild(0).toString().toLowerCase();
+				if(hash.get(property) != null)
+				{
+					hash.put(property, PropertyStatus.FOUND);
+				} else {
+					System.out.println("WARNING: Property \"" + property + "\" is not part of the type \"" + type + "\"");
+				}
 			}
-			return false;
+
+			//Loop over the hashmap and throw an error if any required property wasn't found
+			for (Map.Entry<String, PropertyStatus> property : hash.entrySet()) {
+				if(property.getValue() == PropertyStatus.REQUIRED)
+				{
+					System.out.println("ERROR: " + property.getKey() + " is required and was not found.");
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		public int eval(SimpleNode node) {
@@ -51,6 +77,27 @@ PARSER_BEGIN(Bibtex2Html)
 			}
 
 			return 0;
+		}
+
+		public HashMap<String, PropertyStatus> getRequiredProperties(String type) {
+
+			HashMap<String, PropertyStatus> hash = new HashMap<String, PropertyStatus>();
+
+			if(type.equals("Article"))
+			{
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("journal", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				hash.put("volume", PropertyStatus.REQUIRED);
+				hash.put("number", PropertyStatus.OPTIONAL);
+				hash.put("pages", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("year", PropertyStatus.OPTIONAL);
+			}
+
+			return hash;			
 		}
 	}
 
