@@ -110,7 +110,7 @@ SimpleNode Parse(): {}{
 		| Phdthesis()
 		| Proceedings()
 		| Techreport()
-		| Unpublished();
+		| Unpublished()
 	)
 	Contents()
 	<LF>
@@ -171,7 +171,7 @@ void Unpublished() {
 	<UNPUBLISHED> { jjtThis.type = "unpublished"; }
 }
 
-void Contents(): {}{
+void Contents(): {}{	
 	<OPEN_BRACKET>
 		Id()
 		(
