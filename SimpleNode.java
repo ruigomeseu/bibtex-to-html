@@ -9,8 +9,6 @@ class SimpleNode implements Node {
   protected Object value;
   protected Bibtex2Html parser;
 
-  public String type = "";
-
   public SimpleNode(int i) {
     id = i;
   }

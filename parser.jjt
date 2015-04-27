@@ -14,12 +14,21 @@ PARSER_BEGIN(Bibtex2Html)
 				Bibtex2Html parser = new Bibtex2Html(new FileInputStream("bibtex.txt"));
 				SimpleNode node = parser.Parse();
 				node.dump("");
-				System.out.println("Type = " + node.type);
 			} catch(java.io.FileNotFoundException e) {
           		System.out.println ("File not found.");
           		return;
         	}			
 			
+		}
+
+		public int eval(SimpleNode node) {
+			if(node.jjtGetNumChildren() == 0)
+				return 0;
+			else if(node.jjtGetNumChildren() == 1) // only one child
+				return this.eval((SimpleNode) node.jjtGetChild(0));
+			else if(node.jjtGetNumChildren() == 2 &&)
+
+			return 0;
 		}
 	}
 
@@ -97,7 +106,15 @@ TOKEN :
 }
 
 SimpleNode Parse(): {}{
-	(	Article()
+	Type()
+	Contents()
+	<LF>
+	{ return jjtThis;}
+}
+
+void Type(): {} {
+	(
+		Article()
 		| Book()
 		| Booklet()
 		| Conference()
@@ -112,63 +129,60 @@ SimpleNode Parse(): {}{
 		| Techreport()
 		| Unpublished()
 	)
-	Contents()
-	<LF>
-	{ return jjtThis;}
 }
 
 void Article(): {} {
-	<ARTICLE> { jjtThis.type = "article"; }
+	<ARTICLE>
 }
 
 void Book(): {} {
-	<BOOK> { jjtThis.type = "book"; }
+	<BOOK>
 }
 void Booklet(): {} {
-	<BOOKLET> { jjtThis.type = "booklet"; }
+	<BOOKLET>
 }
 
 void Conference(): {} {
-	<CONFERENCE> { jjtThis.type = "conference"; }
+	<CONFERENCE>
 }
 
 void Inbook(): {} {
-	<INBOOK> { jjtThis.type = "inbook"; }
+	<INBOOK>
 }
 
 void Incollection(): {} {
-	<INCOLLECTION> { jjtThis.type = "incollection"; }
+	<INCOLLECTION>
 }
 
 void Inproceedings(): {} {
-	<INPROCEEDINGS> { jjtThis.type = "inproceedings"; }
+	<INPROCEEDINGS>
 }
 
 void Manual(): {} {
-	<MANUAL> { jjtThis.type = "manual"; }
+	<MANUAL>
 }
 
 void Mastersthesis(): {} {
-	 <MASTERSTHESIS> { jjtThis.type = "mastersthesis"; }
+	 <MASTERSTHESIS>
 }
 
 void Misc(): {} {
-	<MISC> { jjtThis.type = "misc"; }
+	<MISC>
 }
 void Phdthesis(): {} {
-	<PHDTHESIS> { jjtThis.type = "phdthesis"; }
+	<PHDTHESIS>
 }
 
 void Proceedings(): {} {
-	<PROCEEDINGS> { jjtThis.type = "proceedings"; }
+	<PROCEEDINGS>
 }
 
 void Techreport(): {} {
-	<TECHREPORT> { jjtThis.type = "techreport"; }
+	<TECHREPORT>
 }
 
 void Unpublished(): {} {
-	<UNPUBLISHED> { jjtThis.type = "unpublished"; }
+	<UNPUBLISHED>
 }
 
 void Contents(): {}{	
