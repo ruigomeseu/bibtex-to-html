@@ -117,57 +117,57 @@ SimpleNode Parse(): {}{
 	{ return jjtThis;}
 }
 
-void Article() {
+void Article(): {} {
 	<ARTICLE> { jjtThis.type = "article"; }
 }
 
-void Book() {
+void Book(): {} {
 	<BOOK> { jjtThis.type = "book"; }
 }
-void Booklet() {
+void Booklet(): {} {
 	<BOOKLET> { jjtThis.type = "booklet"; }
 }
 
-void Conference() {
+void Conference(): {} {
 	<CONFERENCE> { jjtThis.type = "conference"; }
 }
 
-void Inbook() {
+void Inbook(): {} {
 	<INBOOK> { jjtThis.type = "inbook"; }
 }
 
-void Incollection() {
+void Incollection(): {} {
 	<INCOLLECTION> { jjtThis.type = "incollection"; }
 }
 
-void Inproceedings() {
+void Inproceedings(): {} {
 	<INPROCEEDINGS> { jjtThis.type = "inproceedings"; }
 }
 
-void Manual() {
+void Manual(): {} {
 	<MANUAL> { jjtThis.type = "manual"; }
 }
 
-void Mastersthesis() {
+void Mastersthesis(): {} {
 	 <MASTERSTHESIS> { jjtThis.type = "mastersthesis"; }
 }
 
-void Misc() {
+void Misc(): {} {
 	<MISC> { jjtThis.type = "misc"; }
 }
-void Phdthesis() {
+void Phdthesis(): {} {
 	<PHDTHESIS> { jjtThis.type = "phdthesis"; }
 }
 
-void Proceedings() {
+void Proceedings(): {} {
 	<PROCEEDINGS> { jjtThis.type = "proceedings"; }
 }
 
-void Techreport() {
+void Techreport(): {} {
 	<TECHREPORT> { jjtThis.type = "techreport"; }
 }
 
-void Unpublished() {
+void Unpublished(): {} {
 	<UNPUBLISHED> { jjtThis.type = "unpublished"; }
 }
 

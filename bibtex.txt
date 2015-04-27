@@ -1,3 +1,11 @@
+@article{big,
+author = {Jass, Hugh},
+title = {A big paper},
+journal = {The journal of big papers},
+year = 7991,
+volume = {MCMXCVII}
+}
+
 @book{adcox2005formation,
 	title={Formation ‘ ’of dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
 	author={Last Melo, Jr, First},
@@ -7,14 +15,6 @@
 	year={2005},
 	publisher={Elsevier},
 	pages={184--200}
-}
-
-@article{big,
-author = {Jass, Hugh},
-title = {A big paper},
-journal = {The journal of big papers},
-year = 7991,
-volume = {MCMXCVII}
 }
 
 @article{small,
