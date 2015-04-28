@@ -83,18 +83,180 @@ PARSER_BEGIN(Bibtex2Html)
 
 			HashMap<String, PropertyStatus> hash = new HashMap<String, PropertyStatus>();
 
-			if(type.equals("Article"))
-			{
+			if(type.equals("Article")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
 				hash.put("journal", PropertyStatus.REQUIRED);
 				hash.put("year", PropertyStatus.REQUIRED);
 				hash.put("volume", PropertyStatus.REQUIRED);
+				//Optional
 				hash.put("number", PropertyStatus.OPTIONAL);
 				hash.put("pages", PropertyStatus.OPTIONAL);
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Book")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("publisher", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("volume", PropertyStatus.OPTIONAL);
+				hash.put("series", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("edition", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Booklet")) {
+				hash.put("title", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("author", PropertyStatus.OPTIONAL);
+				hash.put("howpublished", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("year", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Conference")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("booktitle", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("editor", PropertyStatus.OPTIONAL);
+				hash.put("volume", PropertyStatus.OPTIONAL);
+				hash.put("series", PropertyStatus.OPTIONAL);
+				hash.put("pages", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("organization", PropertyStatus.OPTIONAL);
+				hash.put("publisher", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Inbook")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("pages", PropertyStatus.REQUIRED);
+				hash.put("publisher", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("volume", PropertyStatus.OPTIONAL);
+				hash.put("series", PropertyStatus.OPTIONAL);
+				hash.put("type", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("edition", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Incollection")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("booktitle", PropertyStatus.REQUIRED);
+				hash.put("publisher", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("editor", PropertyStatus.OPTIONAL);
+				hash.put("volume", PropertyStatus.OPTIONAL);
+				hash.put("series", PropertyStatus.OPTIONAL);
+				hash.put("type", PropertyStatus.OPTIONAL);
+				hash.put("chapter", PropertyStatus.OPTIONAL);
+				hash.put("pages", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("edition", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Inproceedings")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("booktitle", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("editor", PropertyStatus.OPTIONAL);
+				hash.put("volume", PropertyStatus.OPTIONAL);
+				hash.put("series", PropertyStatus.OPTIONAL);
+				hash.put("pages", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("organization", PropertyStatus.OPTIONAL);
+				hash.put("publisher", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Manual")) {
+				hash.put("title", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("author", PropertyStatus.OPTIONAL);
+				hash.put("organization", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("edition", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("year", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Mastersthesis")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("school", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("type", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Misc")) {
+				//Optional
+				hash.put("author", PropertyStatus.OPTIONAL);
+				hash.put("title", PropertyStatus.OPTIONAL);
+				hash.put("howPublished", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("year", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Phdthesis")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("school", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("type", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Proceedings")) {
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("editor", PropertyStatus.OPTIONAL);
+				hash.put("volume", PropertyStatus.OPTIONAL);
+				hash.put("series", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("publisher", PropertyStatus.OPTIONAL);
+				hash.put("organization", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Techreport")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("institution", PropertyStatus.REQUIRED);
+				hash.put("year", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("type", PropertyStatus.OPTIONAL);
+				hash.put("number", PropertyStatus.OPTIONAL);
+				hash.put("address", PropertyStatus.OPTIONAL);
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
+			} else if (type.equals("Unpublished")) {
+				hash.put("author", PropertyStatus.REQUIRED);
+				hash.put("title", PropertyStatus.REQUIRED);
+				hash.put("note", PropertyStatus.REQUIRED);
+				//Optional
+				hash.put("month", PropertyStatus.OPTIONAL);
+				hash.put("year", PropertyStatus.OPTIONAL);
+				hash.put("key", PropertyStatus.OPTIONAL);
 			}
 
 			return hash;			
