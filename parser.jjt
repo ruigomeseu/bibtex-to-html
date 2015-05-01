@@ -142,6 +142,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("pages", PropertyStatus.OPTIONAL);
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Book")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -155,6 +156,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Booklet")) {
 				hash.put("title", PropertyStatus.REQUIRED);
 				//Optional
@@ -165,6 +167,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("year", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Conference")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -181,6 +184,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("publisher", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Inbook")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -196,6 +200,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Incollection")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -214,6 +219,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Inproceedings")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -230,6 +236,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("publisher", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Manual")) {
 				hash.put("title", PropertyStatus.REQUIRED);
 				//Optional
@@ -241,6 +248,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("year", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Mastersthesis")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -252,6 +260,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Misc")) {
 				//Optional
 				hash.put("author", PropertyStatus.OPTIONAL);
@@ -261,6 +270,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("year", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Phdthesis")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -272,6 +282,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Proceedings")) {
 				hash.put("title", PropertyStatus.REQUIRED);
 				hash.put("year", PropertyStatus.REQUIRED);
@@ -285,6 +296,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("organization", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Techreport")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -297,6 +309,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("note", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			} else if (type.equals("Unpublished")) {
 				hash.put("author", PropertyStatus.REQUIRED);
 				hash.put("title", PropertyStatus.REQUIRED);
@@ -305,6 +318,7 @@ PARSER_BEGIN(Bibtex2Html)
 				hash.put("month", PropertyStatus.OPTIONAL);
 				hash.put("year", PropertyStatus.OPTIONAL);
 				hash.put("key", PropertyStatus.OPTIONAL);
+				hash.put("crossref", PropertyStatus.OPTIONAL);
 			}
 
 			return hash;			
