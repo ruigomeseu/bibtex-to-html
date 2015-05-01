@@ -38,6 +38,18 @@ PARSER_BEGIN(Bibtex2Html)
 			//Loop over the contents tree and update the hashmap with the property status (FOUND)
 			for (int i = 1; i < node.jjtGetNumChildren(); i++) {
 				String property = node.jjtGetChild(i).jjtGetChild(0).toString().toLowerCase();
+				if (property.equals("pages")) {
+					SimpleNode pagesValue = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0);
+					String pagesValueString = pagesValue.contentValue.replace("{", "");
+					pagesValueString = pagesValueString.replace("}", "");
+					String[] pages = pagesValueString.split("--");
+					String pages1 = pages[0];
+					String pages2 = pages[1];
+					if(Integer.parseInt(pages1) > Integer.parseInt(pages2)) {
+						System.out.println("WARNING: Property \"" + "pages" + "\" Page numbers order invalid \"");
+					}
+
+				}
 				if(hash.get(property) != null)
 				{
 					hash.put(property, PropertyStatus.FOUND);
@@ -337,10 +349,16 @@ TOKEN :
 }
 
 SimpleNode Parse(): {}{
+	ParseEntry()
+	(<LF>)*
+	(ParseEntry())*
+	{ return jjtThis;}
+}
+
+void ParseEntry(): {}{
 	EntryType()
 	Contents()
 	<LF>
-	{ return jjtThis;}
 }
 
 void EntryType(): {} {
@@ -772,5 +790,5 @@ void getText(): {} {
 Token btwBrackets(): {} {
 	{Token t = new Token();}
 	t = <BETWEENBRACKETS>
-	{return t;}
+	{jjtThis.contentValue = t.image; return t;}
 }
