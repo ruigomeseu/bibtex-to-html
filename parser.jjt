@@ -8,8 +8,11 @@ PARSER_BEGIN(Bibtex2Html)
 	import java.io.FileInputStream;
 	import java.util.HashMap;
 	import java.util.Map;
+	import java.util.*;
 
-	public class Bibtex2Html {
+	public class Bibtex2Html { 
+
+		private static ArrayList<String> entryIDs = new ArrayList<String>();
 
 		public enum PropertyStatus {
 		    REQUIRED,
@@ -28,6 +31,10 @@ PARSER_BEGIN(Bibtex2Html)
           		System.out.println ("File not found.");
           		return;
         	}
+        	System.out.print("\n");
+        	for(int i = 0; i < entryIDs.size(); i++) {
+				System.out.print( "->" + entryIDs.get(i) + "\n");
+			}
 			
 		}
 
@@ -38,7 +45,7 @@ PARSER_BEGIN(Bibtex2Html)
 			if(node.jjtGetChild(0).toString() == "Id")
 			{
 				SimpleNode idNode = (SimpleNode) node.jjtGetChild(0);
-				System.out.println(idNode.bibtexID);
+				entryIDs.add(idNode.bibtexID);
 			}
 
 			//Loop over the contents tree and update the hashmap with the property status (FOUND)
@@ -58,6 +65,22 @@ PARSER_BEGIN(Bibtex2Html)
 						}
 					}
 				}
+				//CrossRef
+				if (property.equals("crossref")) {
+					SimpleNode crossrefValue = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0);
+					String crossrefValueString = crossrefValue.contentValue.replace("{", "");
+					crossrefValueString = crossrefValueString.replace("}", "");
+					Boolean mrBoolean = false;
+					for(int j = 0; j < entryIDs.size(); j++) {
+						if(entryIDs.get(j).equals(crossrefValueString)) {
+							mrBoolean = true;
+						}
+					}
+					if(!mrBoolean) {
+						System.out.println("WARNING: Reference to \"crossref\" " + crossrefValueString + " not found");
+					}
+				}
+
 				if(hash.get(property) != null)
 				{
 					hash.put(property, PropertyStatus.FOUND);
@@ -70,7 +93,7 @@ PARSER_BEGIN(Bibtex2Html)
 			for (Map.Entry<String, PropertyStatus> property : hash.entrySet()) {
 				if(property.getValue() == PropertyStatus.REQUIRED)
 				{
-					System.out.println("ERROR: " + property.getKey() + " is required and was not found.");
+					System.out.println("ERROR: Property \"" + property.getKey() + "\" is REQUIRED and was not found in \"" + type + "\"");
 					return false;
 				}
 			}
@@ -362,16 +385,14 @@ TOKEN :
 }
 
 SimpleNode Parse(): {}{
-	ParseEntry()
-	(<LF>)*
-	(ParseEntry())*
+	(ParseEntry())+
 	{ return jjtThis;}
 }
 
 void ParseEntry(): {}{
 	EntryType()
 	Contents()
-	<LF>
+	(<LF>)*
 }
 
 void EntryType(): {} {
@@ -790,7 +811,6 @@ void Crossref(): { Token crossref = null; } {
 		| ( crossref =  <WORD> | crossref = <STRING> | crossref = <TEXT>)
 		| crossref = btwBrackets()
 	)
-	{ System.out.println("crossref=" + crossref.image); }
 }
 
 
