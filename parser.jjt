@@ -35,20 +35,28 @@ PARSER_BEGIN(Bibtex2Html)
 		{
 			HashMap<String, PropertyStatus> hash = getRequiredProperties(type);
 
+			if(node.jjtGetChild(0).toString() == "Id")
+			{
+				SimpleNode idNode = (SimpleNode) node.jjtGetChild(0);
+				System.out.println(idNode.bibtexID);
+			}
+
 			//Loop over the contents tree and update the hashmap with the property status (FOUND)
 			for (int i = 1; i < node.jjtGetNumChildren(); i++) {
 				String property = node.jjtGetChild(i).jjtGetChild(0).toString().toLowerCase();
+				//Pages
 				if (property.equals("pages")) {
 					SimpleNode pagesValue = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0);
 					String pagesValueString = pagesValue.contentValue.replace("{", "");
 					pagesValueString = pagesValueString.replace("}", "");
-					String[] pages = pagesValueString.split("--");
-					String pages1 = pages[0];
-					String pages2 = pages[1];
-					if(Integer.parseInt(pages1) > Integer.parseInt(pages2)) {
-						System.out.println("WARNING: Property \"" + "pages" + "\" Page numbers order invalid \"");
+					if (pagesValueString.contains("-")) {
+						String[] pages = pagesValueString.split("--");
+						String pages1 = pages[0];
+						String pages2 = pages[1];
+						if(Integer.parseInt(pages1) > Integer.parseInt(pages2)) {
+							System.out.println("WARNING: Property \"" + "pages" + "\" Page numbers order invalid");
+						}
 					}
-
 				}
 				if(hash.get(property) != null)
 				{
@@ -75,8 +83,7 @@ PARSER_BEGIN(Bibtex2Html)
 				return 0;
 			else if(node.jjtGetNumChildren() == 1) // only one child
 				return this.eval((SimpleNode) node.jjtGetChild(0));
-			else if(node.jjtGetNumChildren() == 2)
-			{
+			else if(node.jjtGetNumChildren() == 2){
 				if(
 					node.jjtGetChild(0).toString().equals("EntryType")
 					&& node.jjtGetChild(1).toString().equals("Contents")
@@ -84,7 +91,13 @@ PARSER_BEGIN(Bibtex2Html)
 
 					verifyProperties(node.jjtGetChild(0).jjtGetChild(0).toString(), (SimpleNode) node.jjtGetChild(1));
 				} else {
+					this.eval((SimpleNode) node.jjtGetChild(0));
+					this.eval((SimpleNode) node.jjtGetChild(1));
 
+				}
+			} else if(node.jjtGetNumChildren() > 2) {
+				for(int i = 0; i<node.jjtGetNumChildren(); i++) {
+					this.eval((SimpleNode) node.jjtGetChild(i));
 				}
 			}
 
@@ -480,6 +493,7 @@ void Property(): {} {
 void Id(): {Token id = null;} {
 	(id = <WORD> | id = <STRING>)
 	{ System.out.println("id=" + id.image); }
+	{jjtThis.bibtexID = id.image;}
 }
 
 

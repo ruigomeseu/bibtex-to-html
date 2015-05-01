@@ -11,9 +11,6 @@
 }
 
 
-
-
-
 @book{adcox2005formation,
   title={Formation ‘ ’of dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
   author={Last Melo, Jr, First},
@@ -22,7 +19,7 @@
   number={1},
   year={2005},
   publisher={Elsevier},
-  pages={184--200}
+  pages={300--200}
 }
 @article{small,
 author = {Freely, I.P.},
@@ -32,7 +29,16 @@ year = 1997,
 volume = {1},
 note = {to appear}
 }
-
+@article{guth1981inflationary,
+  title={Inflationary universe: A possible solution to the horizon and flatness problems},
+  author={Guth, Alan H},
+  journal={Physical Review D},
+  volume={23},
+  number={2},
+  pages={347},
+  year={1981},
+  publisher={APS}
+}
 
 
 

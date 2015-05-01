@@ -10,6 +10,7 @@ class SimpleNode implements Node {
   protected Bibtex2Html parser;
 
   public String contentValue = "";
+  public String bibtexID = "";
 
   public SimpleNode(int i) {
     id = i;
