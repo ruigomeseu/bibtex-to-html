@@ -5,9 +5,8 @@
   volume={10},
   number={2},
   pages={105--129},
-  year=2000 ,
-  publisher={Wiley Online Library},
-  annote={melacidade}
+  year=2000,
+  crossref = {adcox2005formation},
 }
 
 
@@ -45,6 +44,5 @@ note = {to appear}
 @inproceedings{carlos:14,
  title = {A vida de Carlos 14},
  author = {An Author},
- crossref = {otherBook},
  pages = {330--331}
 }

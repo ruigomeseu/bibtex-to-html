@@ -3,3 +3,6 @@
 *.class
 
 !SimpleNode.java
+!Validator.java
+!/Exceptions/
+!/Exceptions/*.java
