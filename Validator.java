@@ -59,8 +59,7 @@ public class Validator {
 	}
 
 	public void validateProperty(String type, String property) throws InvalidPropertyException {
-		if(hash.get(property) != null)
-		{
+		if(hash.get(property) != null) {
 			hash.put(property, Validator.PropertyStatus.FOUND);
 		} else {
 			throw new InvalidPropertyException("Property \"" + property + "\" is not part of the \"" + type + "\" entry (Entry ID: " + entryId + ")");
@@ -70,8 +69,7 @@ public class Validator {
 	public void validateRequiredProperties() throws MissingPropertyException {
 		//Loop over the hashmap and throw an error if any required property wasn't found
 		for (Map.Entry<String, Validator.PropertyStatus> property : hash.entrySet()) {
-			if(property.getValue() == Validator.PropertyStatus.REQUIRED)
-			{
+			if(property.getValue() == Validator.PropertyStatus.REQUIRED) {
 				throw new MissingPropertyException("Property \"" + property.getKey() + "\" is REQUIRED and was not found (Entry ID: " + entryId + ")");
 			}
 		}
