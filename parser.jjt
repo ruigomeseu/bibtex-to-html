@@ -97,6 +97,17 @@ PARSER_BEGIN(Bibtex2Html)
 					}
 				}
 
+				//Validate Edition if exists
+				if(property.equals("edition")) {
+					SimpleNode edition = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0);
+
+					try {
+						validator.validateEditionValue(edition.contentValue);
+					} catch(NonOrdinalEditionException e) {
+						this.handleException(e);
+					}
+				}
+
 				try {
 					validator.validateProperty(type, property);
 				} catch(InvalidPropertyException e) {
@@ -430,7 +441,7 @@ void Year(): {Token year = null;} {
 		| year = <INTEGER>
 		| year = btwBrackets()
 	)
-	{ System.out.println("year=" + year.image + "|"); }
+	{ System.out.println("year=" + year.image); }
 }
 
 void Volume(): {Token volume = null;} {

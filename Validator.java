@@ -8,6 +8,21 @@ public class Validator {
 	    OPTIONAL,
 	    FOUND
 	}
+	private enum EditionValues {
+		first,
+		second,
+		third,
+		fourth,
+		fifth,
+		sixth,
+		seventh,
+		eighth,
+		ninth,
+		tenth,
+		eleventh,
+		twelfth
+		//TODO add more? more languages?
+	}
 
 	private ArrayList<String> ids;
 	private HashMap<String, Validator.PropertyStatus> hash;
@@ -42,6 +57,19 @@ public class Validator {
 			}
 		}
 	}
+	
+	//validate edition(optional) in ordinal form (long form) compares with all values within enumeration EditionValues
+	public void validateEditionValue(String edition) throws NonOrdinalEditionException {
+		String ed = edition.replace("{", "").replace("}", "");
+		ed = ed.toLowerCase();
+		
+		for( EditionValues val : EditionValues.values()){
+			if(val.toString().equals(ed)){
+				return;
+			}
+		}
+		throw new NonOrdinalEditionException("Invalid non-ordinal value \""+ed+"\" in edition field (Entry ID: " + entryId + ")");
+	}
 
 	public void validateCrossRef(String crossref) throws CrossRefException {
 		crossref = crossref.replace("{", "").replace("}", "");
@@ -74,6 +102,7 @@ public class Validator {
 			}
 		}
 	}
+	
 
 	public HashMap<String, PropertyStatus> getRequiredProperties(String type) {
 		HashMap<String, PropertyStatus> hash = new HashMap<String, PropertyStatus>();
