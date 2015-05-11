@@ -3,8 +3,9 @@
   author={Melao, Nuno and Pidd, Michael},
   volume={10},
   number={2},
-  pages={105--129},
+  pages={1--129},
   year=2000,
+  journal={sim},
   crossref = {adcox2005formation},
 }
 
@@ -12,13 +13,11 @@
 @book{adcox2005formation,
   title={Formation ‘ ’of dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
   author={Last Melo, Jr, First},
-  journal={Nuclear Physics A},
   volume={757},
-  number={1},
   year={2005},
   publisher={Elsevier},
-  pages={300--200}
 }
+
 @article{small,
 author = {Freely, I.P.},
 title = {A small paper},
@@ -35,7 +34,6 @@ note = {to appear}
   number={2},
   pages={347},
   year={1981},
-  publisher={APS}
 }
 
 

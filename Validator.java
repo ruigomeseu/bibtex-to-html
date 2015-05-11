@@ -86,8 +86,13 @@ public class Validator {
 		}
 	}
 
-	public void validateProperty(String type, String property) throws InvalidPropertyException {
+	public void validateProperty(String type, String property) throws InvalidPropertyException, DuplicatePropertyException {
 		if(hash.get(property) != null) {
+
+			if(hash.get(property) == PropertyStatus.FOUND) {
+				throw new DuplicatePropertyException("Duplicate property \"" + property + "\" found (Entry ID: " + entryId + ")");
+			}
+
 			hash.put(property, Validator.PropertyStatus.FOUND);
 		} else {
 			throw new InvalidPropertyException("Property \"" + property + "\" is not part of the \"" + type + "\" entry (Entry ID: " + entryId + ")");

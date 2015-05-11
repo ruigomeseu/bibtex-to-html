@@ -21,7 +21,7 @@ PARSER_BEGIN(Bibtex2Html)
 			System.out.println("Strict mode: " + strictMode);
 			
 			try {
-				Bibtex2Html parser = new Bibtex2Html(new FileInputStream("bibtex.txt"));
+				Bibtex2Html parser = new Bibtex2Html(new FileInputStream("validbibtex.txt"));
 				SimpleNode node = parser.Parse();
 				node.dump("");
 				try {
