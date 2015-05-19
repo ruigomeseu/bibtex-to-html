@@ -8,3 +8,5 @@ html/*
 !Entry.java
 !/Exceptions/
 !/Exceptions/*.java
+!/org/json/
+!/org/json/*.java
