@@ -95,6 +95,7 @@ PARSER_BEGIN(Bibtex2Html)
 			Validator validator = new Validator(ids, nodeId, type);
 			Entry entry = new Entry(nodeId, type);
 			entries.add(entry);
+			entry.addProperty("id", nodeId);
 			System.out.println(nodeId);
 
 			//Loop over the contents tree and update the hashmap with the property status (FOUND)

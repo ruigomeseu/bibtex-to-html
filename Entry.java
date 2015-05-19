@@ -47,11 +47,11 @@ public class Entry {
 			content = content.replace("--", "&mdash;");
 		} 
 
-		Pattern accute = Pattern.compile("\\\\'\\{([a-zA-Z])\\}");
-		Matcher match = accute.matcher(content);
+		Pattern acute = Pattern.compile("\\\\'\\{([a-zA-Z])\\}");
+		Matcher acuteMatch = acute.matcher(content);
 
-		if(match.find()) {
-			content = match.replaceAll("&" + match.group(1) + "acute;");
+		if(acuteMatch.find()) {
+			content = acuteMatch.replaceAll("&" + match.group(1) + "acute;");
 		}
 
 		return content;
@@ -71,8 +71,8 @@ public class Entry {
 		}
 
 		//Hide non-existent properties
-		Pattern accute = Pattern.compile("\\{\\{DISPLAY_[A-Z]+\\}\\}");
-		Matcher match = accute.matcher(template);
+		Pattern nonExistent = Pattern.compile("\\{\\{DISPLAY_[A-Z]+\\}\\}");
+		Matcher match = nonExistent.matcher(template);
 
 		if(match.find()) {
 			template = match.replaceAll("display: none;");
