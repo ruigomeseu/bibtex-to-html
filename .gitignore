@@ -1,6 +1,7 @@
 *.java
 *.jj
 *.class
+html/*
 
 !SimpleNode.java
 !Validator.java
