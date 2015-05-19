@@ -1,0 +1,9 @@
+{
+	"strict": false,
+	"style": "chicago",
+	"template_path": "/home/luis/COMP/Proj/templates/",
+	"master_template": "template.html",
+	"output_file": "/home/luis/COMP/Proj/output/entries.html",
+	"bibtexFile": "/home/luis/COMP/Proj/bibtex.txt"
+
+}

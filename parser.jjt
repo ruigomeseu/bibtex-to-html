@@ -5,6 +5,8 @@ options {
 
 PARSER_BEGIN(Bibtex2Html)
 
+	import org.json.JSONException;
+	import org.json.JSONObject;
 	import java.io.FileInputStream;
 	import java.util.*;
 	import Exceptions.*;
@@ -22,14 +24,20 @@ PARSER_BEGIN(Bibtex2Html)
 
 		public static void main(String args[]) throws Exception {
 
-			style = "chicago";
+			//json string
+			String json_str = readFile("/home/luis/COMP/Proj/config.json", Charset.defaultCharset());
+			JSONObject config = new JSONObject(json_str);
 
-			parseArguments(args);
+			style = config.getString("style");
+			strictMode = config.getBoolean("strict");
+			String templatesPath = config.getString("template_path");
+			String outputHtmlFile = config.getString("output_file");
+			String bibtexFile = config.getString("bibtexFile");
 
 			System.out.println("Strict mode: " + strictMode);
 			
 			try {
-				Bibtex2Html parser = new Bibtex2Html(new FileInputStream("validbibtex.txt"));
+				Bibtex2Html parser = new Bibtex2Html(new FileInputStream(bibtexFile));
 				SimpleNode node = parser.Parse();
 				node.dump("");
 				try {
@@ -47,27 +55,16 @@ PARSER_BEGIN(Bibtex2Html)
         	} 
 
 			String allEntries = "";
-			String entryHtmlTemplate = readFile("templates/" + style + ".html", Charset.defaultCharset());
+			String entryHtmlTemplate = readFile(templatesPath + style + ".html", Charset.defaultCharset());
 
         	for(Entry entry: entries) {
         		allEntries = allEntries + entry.replaceOnTemplate(entryHtmlTemplate);
         	}   
 
-        	String masterTemplate = readFile("templates/template.html", Charset.defaultCharset());
+        	String masterTemplate = readFile(templatesPath + "template.html", Charset.defaultCharset());
         	masterTemplate = masterTemplate.replace("{{ENTRIES}}", allEntries);
 
-        	Files.write(Paths.get("html/entries.html"), masterTemplate.getBytes());
-		}
-
-		public static void parseArguments(String args[]) {
-			setDefaults();
-
-			for(int i = 0;i<args.length;i++) {
-				System.out.println(args[i]);
-				if(args[i].equals("--strict")) {
-					strictMode = true;
-				}
-			}
+        	Files.write(Paths.get(outputHtmlFile), masterTemplate.getBytes());
 		}
 
 		public static String readFile(String path, Charset encoding) throws IOException {
