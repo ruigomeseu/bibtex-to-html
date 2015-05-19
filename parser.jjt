@@ -8,13 +8,21 @@ PARSER_BEGIN(Bibtex2Html)
 	import java.io.FileInputStream;
 	import java.util.*;
 	import Exceptions.*;
+	import java.nio.file.Paths;
+	import java.nio.file.Files;
+	import java.nio.charset.Charset;
+	import java.io.IOException;
 
 	public class Bibtex2Html { 
 
 		private static Boolean strictMode;
 		private static ArrayList<String> ids = new ArrayList<String>();
+		private static ArrayList<Entry> entries = new ArrayList<Entry>();
+		private static String style;
 
-		public static void main(String args[]) throws ParseException {
+		public static void main(String args[]) throws Exception {
+
+			style = "chicago";
 
 			parseArguments(args);
 
@@ -36,7 +44,19 @@ PARSER_BEGIN(Bibtex2Html)
 			} catch(java.io.FileNotFoundException e) {
           		System.out.println ("File not found.");
           		return;
-        	}        	
+        	} 
+
+			String allEntries = "";
+			String entryHtmlTemplate = readFile("templates/" + style + ".html", Charset.defaultCharset());
+
+        	for(Entry entry: entries) {
+        		allEntries = allEntries + entry.replaceOnTemplate(entryHtmlTemplate);
+        	}   
+
+        	String masterTemplate = readFile("templates/template.html", Charset.defaultCharset());
+        	masterTemplate = masterTemplate.replace("{{ENTRIES}}", allEntries);
+
+        	Files.write(Paths.get("html/entries.html"), masterTemplate.getBytes());
 		}
 
 		public static void parseArguments(String args[]) {
@@ -48,6 +68,11 @@ PARSER_BEGIN(Bibtex2Html)
 					strictMode = true;
 				}
 			}
+		}
+
+		public static String readFile(String path, Charset encoding) throws IOException {
+			byte[] encoded = Files.readAllBytes(Paths.get(path));
+			return new String(encoded, encoding);
 		}
 
 		public static void setDefaults() {
@@ -71,10 +96,19 @@ PARSER_BEGIN(Bibtex2Html)
 			}
 
 			Validator validator = new Validator(ids, nodeId, type);
+			Entry entry = new Entry(nodeId, type);
+			entries.add(entry);
+			System.out.println(nodeId);
 
 			//Loop over the contents tree and update the hashmap with the property status (FOUND)
 			for (int i = 1; i < node.jjtGetNumChildren(); i++) {
 				String property = node.jjtGetChild(i).jjtGetChild(0).toString().toLowerCase();
+				SimpleNode contentNode = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0);
+				if(contentNode.jjtGetNumChildren() == 1) {
+					contentNode = (SimpleNode) contentNode.jjtGetChild(0);
+				}
+
+				String content = contentNode.contentValue;
 
 				//Validate pages
 				if (property.equals("pages")) {
@@ -110,6 +144,7 @@ PARSER_BEGIN(Bibtex2Html)
 
 				try {
 					validator.validateProperty(type, property);
+					entry.addProperty(property, content);
 				} catch(InvalidPropertyException e) {
 					this.handleException(e);
 				}
@@ -227,9 +262,10 @@ TOKEN :
 	| < WORD : (["a" - "z" , "A"-"Z" , "0" - "9", "-", ":"] | <SPECIAL>)+ >
 	
 	// \, 47 = / , u2018 = ‘ , u2019 = ’ , 126 = , u002E = . , 61 =  , u005E = ^
-	| < SPECIAL : (["\\", "\47", "\u2018", "\u2019", "\126", "\u002E", "\61", "\u005E" ])+ >
+	| < SPECIAL : (["\'", "\\", "\47", "\u2018", "\u2019", "\126", "\u002E", "\61", "\u005E" ])+ >
 	| < STRING : ((<WORD>)+((" "|", ")+<WORD>)*)+ >
 	| < BETWEENBRACKETS : ( <OPEN_BRACKET> (<WORD>|<STRING>)* <CLOSE_BRACKET> )+ >
+	| < BETWEENQUOTES : ( <QUOTE> (<WORD>|<STRING>)* <QUOTE> )+ >
 
 	| < TEXT : (
 		( <STRING> | <WORD> | <WS> )+ ( <BETWEENBRACKETS> )+ ( <STRING> | <WORD>  | <WS> )+
@@ -384,7 +420,7 @@ void Title(): {Token title = null;} {
 		| (title = <WORD> | title = <STRING> | title = <TEXT>)
 		| title = btwBrackets()
 	)
-	{ System.out.println("title=" + title.image); }
+	{ jjtThis.contentValue = title.image; }
 }
 
 void Month(): { Token month = null;} {
@@ -395,7 +431,7 @@ void Month(): { Token month = null;} {
 		[<WS>] <CLOSE_BRACKET>
 		| (month = <INTEGER>)
 	)
-	{ System.out.println("month=" + month.image); }
+	{ jjtThis.contentValue = month.image + "";  }
 }
 
 /*
@@ -419,7 +455,7 @@ void Author(): {Token author = null;} {
 		|
 		author = btwBrackets()
 	)
-	{ System.out.println("author=" + author.image); }
+	{ jjtThis.contentValue = author.image + ""; }
 }
 
 void Journal(): {Token journal = null;} {
@@ -431,27 +467,27 @@ void Journal(): {Token journal = null;} {
 		| (journal = <WORD> | journal = <STRING> | journal = <TEXT>)
 		| journal = btwBrackets()
 	)
-	{ System.out.println("journal=" + journal.image); }
+	{ jjtThis.contentValue = journal.image + ""; }
 }
 
 void Year(): {Token year = null;} {
 	<YEAR> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>] year = <INTEGER> [<WS>] <CLOSE_BRACKET>
-		| year = <INTEGER>
+		| year = integerNumber()
 		| year = btwBrackets()
 	)
-	{ System.out.println("year=" + year.image); }
+	{ jjtThis.contentValue = year.image + ""; }
 }
 
 void Volume(): {Token volume = null;} {
 	<VOLUME> [<WS>] <EQUAL> [<WS>]
 	(
 		<OPEN_BRACKET> [<WS>] volume = <INTEGER> [<WS>] <CLOSE_BRACKET>
-		| volume = <INTEGER>
+		| volume = integerNumber()
 		| volume = btwBrackets()
 	)
-	{ System.out.println("volume=" + volume.image); }
+	{ jjtThis.contentValue = volume.image + ""; }
 }
 
 void Pages(): {Token pages = null;} {
@@ -462,7 +498,7 @@ void Pages(): {Token pages = null;} {
 		| pages = <PAGESNUMBERS>
 		| pages = btwBrackets()
 	)
-	{ System.out.println("pages=" + pages.image); }
+	{ jjtThis.contentValue = pages.image + ""; }
 }
 
 void Number(): {Token number = null;} {
@@ -472,7 +508,7 @@ void Number(): {Token number = null;} {
 		| number = <INTEGER>
 		| number = btwBrackets()
 	)
-	{ System.out.println("number=" + number.image); }
+	{ jjtThis.contentValue = number.image + ""; }
 }
 
 void Publisher(): {Token publisher = null;} {
@@ -484,7 +520,7 @@ void Publisher(): {Token publisher = null;} {
 		| ( publisher =  <WORD> | publisher = <STRING> | publisher = <TEXT>)
 		| publisher = btwBrackets()
 	)
-	{ System.out.println("publisher=" + publisher.image); }
+	{ jjtThis.contentValue = publisher.image + ""; }
 }
 
 void Note(): {Token note = null;} {
@@ -496,7 +532,7 @@ void Note(): {Token note = null;} {
 		| ( note =  <WORD> | note = <STRING> | note = <TEXT>)
 		| note = btwBrackets()
 	)
-	{ System.out.println("note=" + note.image); }
+	{ jjtThis.contentValue = note.image + ""; }
 }
 
 void Key(): { Token key = null; } {
@@ -508,7 +544,7 @@ void Key(): { Token key = null; } {
 		| ( key =  <WORD> | key = <STRING> | key = <TEXT>)
 		| key = btwBrackets()
 	)
-	{ System.out.println("key=" + key.image); }
+	{ jjtThis.contentValue = key.image + ""; }
 }
 
 void Editor(): { Token editor = null; } {
@@ -520,7 +556,7 @@ void Editor(): { Token editor = null; } {
 		| ( editor =  <WORD> | editor = <STRING> | editor = <TEXT>)
 		| editor = btwBrackets()
 	)
-	{ System.out.println("editor=" + editor.image); }
+	{ jjtThis.contentValue = editor.image + ""; }
 }
 
 void Series(): { Token series = null; } {
@@ -532,7 +568,7 @@ void Series(): { Token series = null; } {
 		| ( series =  <WORD> | series = <STRING> | series = <TEXT>)
 		| series = btwBrackets()
 	)
-	{ System.out.println("series=" + series.image); }
+	{ jjtThis.contentValue = series.image + ""; }
 }
 
 void Address(): { Token address = null; } {
@@ -544,7 +580,7 @@ void Address(): { Token address = null; } {
 		| ( address =  <WORD> | address = <STRING> | address = <TEXT>)
 		| address = btwBrackets()
 	)
-	{ System.out.println("address=" + address.image); }
+	{ jjtThis.contentValue = address.image + ""; }
 }
 
 void Edition(): { Token edition = null; } {
@@ -556,7 +592,7 @@ void Edition(): { Token edition = null; } {
 		| ( edition =  <WORD> | edition = <STRING> | edition = <TEXT>)
 		| edition = btwBrackets()
 	)
-	{ System.out.println("edition=" + edition.image); }
+	{ jjtThis.contentValue = edition.image + ""; }
 }
 
 void HowPublished(): { Token howPublished = null; } {
@@ -568,7 +604,7 @@ void HowPublished(): { Token howPublished = null; } {
 		| ( howPublished =  <WORD> | howPublished = <STRING> | howPublished = <TEXT>)
 		| howPublished = btwBrackets()
 	)
-	{ System.out.println("howPublished=" + howPublished.image); }
+	{ jjtThis.contentValue = howPublished.image + ""; }
 }
 
 void Chapter(): { Token chapter = null; } {
@@ -580,7 +616,7 @@ void Chapter(): { Token chapter = null; } {
 		| ( chapter =  <WORD> | chapter = <STRING> | chapter = <TEXT>)
 		| chapter = btwBrackets()
 	)
-	{ System.out.println("chapter=" + chapter.image); }
+	{ jjtThis.contentValue = chapter.image + ""; }
 }
 
 void Type(): { Token type = null; } {
@@ -592,7 +628,7 @@ void Type(): { Token type = null; } {
 		| ( type =  <WORD> | type = <STRING> | type = <TEXT>)
 		| type = btwBrackets()
 	)
-	{ System.out.println("type=" + type.image); }
+	{ jjtThis.contentValue = type.image + ""; }
 }
 
 void BookTitle(): { Token bookTitle = null; } {
@@ -604,7 +640,7 @@ void BookTitle(): { Token bookTitle = null; } {
 		| ( bookTitle =  <WORD> | bookTitle = <STRING> | bookTitle = <TEXT>)
 		| bookTitle = btwBrackets()
 	)
-	{ System.out.println("bookTitle=" + bookTitle.image); }
+	{ jjtThis.contentValue = bookTitle.image + ""; }
 }
 
 void Organization(): { Token organization = null; } {
@@ -616,7 +652,7 @@ void Organization(): { Token organization = null; } {
 		| ( organization =  <WORD> | organization = <STRING> | organization = <TEXT>)
 		| organization = btwBrackets()
 	)
-	{ System.out.println("organization=" + organization.image); }
+	{ jjtThis.contentValue = organization.image + ""; }
 }
 
 void School(): { Token school = null; } {
@@ -628,7 +664,7 @@ void School(): { Token school = null; } {
 		| ( school =  <WORD> | school = <STRING> | school = <TEXT>)
 		| school = btwBrackets()
 	)
-	{ System.out.println("school=" + school.image); }
+	{ jjtThis.contentValue = school.image + ""; }
 }
 
 void Institution(): { Token institution = null; } {
@@ -640,7 +676,7 @@ void Institution(): { Token institution = null; } {
 		| ( institution =  <WORD> | institution = <STRING> | institution = <TEXT>)
 		| institution = btwBrackets()
 	)
-	{ System.out.println("institution=" + institution.image); }
+	{ jjtThis.contentValue = institution.image + ""; }
 }
 
 void Annote(): { Token annote = null; } {
@@ -652,7 +688,7 @@ void Annote(): { Token annote = null; } {
 		| ( annote =  <WORD> | annote = <STRING> | annote = <TEXT>)
 		| annote = btwBrackets()
 	)
-	{ System.out.println("annote=" + annote.image); }
+	{ jjtThis.contentValue = annote.image + ""; }
 }
 
 void Crossref(): { Token crossref = null; } {
@@ -664,6 +700,7 @@ void Crossref(): { Token crossref = null; } {
 		| ( crossref =  <WORD> | crossref = <STRING> | crossref = <TEXT>)
 		| crossref = btwBrackets()
 	)
+	{ jjtThis.contentValue = crossref.image + ""; }
 }
 
 
@@ -676,6 +713,13 @@ void getText(): {} {
 
 Token btwBrackets(): {} {
 	{Token t = new Token();}
-	t = <BETWEENBRACKETS>
+	(t = <BETWEENBRACKETS>
+	| t = <BETWEENQUOTES>)
 	{jjtThis.contentValue = t.image; return t;}
+}
+
+Token integerNumber(): {} {
+	{Token t = new Token();}
+	t = <INTEGER>
+	{jjtThis.contentValue = t.image + ""; return t;}
 }
