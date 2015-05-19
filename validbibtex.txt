@@ -1,5 +1,5 @@
 @article{melao2000conceptual,
-  title={A conceptual framework for understanding business processes and business process modelling},
+  title="A conceptual framework for understanding business processes and business process modelling",
   author={Melao, Nuno and Pidd, Michael},
   volume={10},
   number={2},
@@ -11,8 +11,8 @@
 
 
 @book{adcox2005formation,
-  title={Formation ‘ ’of dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
-  author={Last Melo, Jr, First},
+  title={Formation of \'{a} dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
+  author={Jean {de} Carlos, Melo {Nome} Sjod},
   volume={757},
   year={2005},
   publisher={Elsevier},
