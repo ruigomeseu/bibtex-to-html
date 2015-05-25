@@ -25,7 +25,7 @@ PARSER_BEGIN(Bibtex2Html)
 		public static void main(String args[]) throws Exception {
 
 			//json string
-			String json_str = readFile("/home/luis/COMP/Proj/config.json", Charset.defaultCharset());
+			String json_str = readFile("./config.json", Charset.defaultCharset());
 			JSONObject config = new JSONObject(json_str);
 
 			style = config.getString("style");
@@ -260,7 +260,7 @@ TOKEN :
 	| < WORD : (["a" - "z" , "A"-"Z" , "0" - "9", "-", ":"] | <SPECIAL>)+ >
 	
 	// \, 47 = / , u2018 = ‘ , u2019 = ’ , 126 = , u002E = . , 61 =  , u005E = ^
-	| < SPECIAL : (["\'", "\\", "\47", "\u2018", "\u2019", "\126", "\u002E", "\61", "\u005E" ])+ >
+	| < SPECIAL : (["\'", "\"", "\u007E", "\\", "\47", "\u2018", "\u2019", "\126", "\u002E", "\61", "\u005E", "\u0060"])+ >
 	| < STRING : ((<WORD>)+((" "|", ")+<WORD>)*)+ >
 	| < BETWEENBRACKETS : ( <OPEN_BRACKET> (<WORD>|<STRING>)* <CLOSE_BRACKET> )+ >
 	| < BETWEENQUOTES : ( <QUOTE> (<WORD>|<STRING>)* <QUOTE> )+ >

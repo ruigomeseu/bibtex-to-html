@@ -47,12 +47,7 @@ public class Entry {
 			content = content.replace("--", "&mdash;");
 		} 
 
-		Pattern acute = Pattern.compile("\\\\'\\{([a-zA-Z])\\}");
-		Matcher acuteMatch = acute.matcher(content);
-
-		if(acuteMatch.find()) {
-			content = acuteMatch.replaceAll("&" + match.group(1) + "acute;");
-		}
+		content = this.convertAccents(content);
 
 		return content;
 	}
@@ -83,6 +78,62 @@ public class Entry {
 
 	public String getMonth(int month) {
     	return new DateFormatSymbols().getMonths()[month-1];
+    }
+
+    private String convertAccents(String content)
+    {
+    	Pattern acute = Pattern.compile("\\\\'\\{([a-zA-Z])\\}");
+		Matcher acuteMatch = acute.matcher(content);
+
+		if(acuteMatch.find()) {
+			content = acuteMatch.replaceAll("&" + acuteMatch.group(1) + "acute;");
+		}
+
+		Pattern grave = Pattern.compile("\\\\`\\{([a-zA-Z])\\}");
+		Matcher graveMatch = grave.matcher(content);
+
+		if(graveMatch.find()) {
+			content = graveMatch.replaceAll("&" + graveMatch.group(1) + "grave;");
+		}
+
+		Pattern uml = Pattern.compile("\\\\\"\\{([a-zA-Z])\\}");
+		Matcher umlMatch = uml.matcher(content);
+
+		if(umlMatch.find()) {
+			content = umlMatch.replaceAll("&" + umlMatch.group(1) + "uml;");
+		}
+
+		Pattern tilde = Pattern.compile("\\\\~\\{([a-zA-Z])\\}");
+		Matcher tildeMatch = tilde.matcher(content);
+
+		if(tildeMatch.find()) {
+			content = tildeMatch.replaceAll("&" + tildeMatch.group(1) + "tilde;");
+		}
+
+		Pattern circ = Pattern.compile("\\\\\\^\\{([a-zA-Z])\\}");
+		Matcher circMatch = circ.matcher(content);
+
+		if(circMatch.find()) {
+			content = circMatch.replaceAll("&" + circMatch.group(1) + "circ;");
+		}
+
+		Pattern elig = Pattern.compile("\\\\(ae|AE)");
+		Matcher eligMatch = elig.matcher(content);
+
+		if(eligMatch.find()) {
+			content = eligMatch.replaceAll("&" + eligMatch.group(1) + "elig;");
+		}
+
+		Pattern cedil = Pattern.compile("\\\\c\\{([a-zA-Z])\\}");
+		Matcher cedilMatch = cedil.matcher(content);
+
+		if(cedilMatch.find()) {
+			content = cedilMatch.replaceAll("&" + cedilMatch.group(1) + "cedil;");
+		}
+
+
+
+		return content;
     }
 
 
