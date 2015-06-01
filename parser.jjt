@@ -10,8 +10,7 @@ PARSER_BEGIN(Bibtex2Html)
 	import java.io.FileInputStream;
 	import java.util.*;
 	import Exceptions.*;
-	import java.nio.file.Paths;
-	import java.nio.file.Files;
+	import java.nio.file.*;
 	import java.nio.charset.Charset;
 	import java.io.IOException;
 
@@ -63,8 +62,12 @@ PARSER_BEGIN(Bibtex2Html)
 
         	String masterTemplate = readFile(templatesPath + "template.html", Charset.defaultCharset());
         	masterTemplate = masterTemplate.replace("{{ENTRIES}}", allEntries);
+			
 
-        	Files.write(Paths.get(outputHtmlFile), masterTemplate.getBytes());
+			Path path = Paths.get(outputHtmlFile);
+            if (!Files.exists( path.getParent() ))
+            	Files.createDirectories( path.getParent() );
+        	Files.write(path, masterTemplate.getBytes());
 		}
 
 		public static String readFile(String path, Charset encoding) throws IOException {
