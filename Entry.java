@@ -9,13 +9,15 @@ public class Entry {
 	private String id;
 	private String type;
 	private HashMap<String, String> properties;
+	private String style;
 
 	public Entry() {
 	}
 
-	public Entry(String id, String type) {
+	public Entry(String id, String type, String style) {
 		this.id = id;
 		this.type = type;
+		this.style = style;
 		properties = new HashMap<String, String>();
 	}
 
@@ -40,16 +42,27 @@ public class Entry {
 	public String convertToHtml(String property, String content)
 	{
 		if(property.equals("author")) {
-			//TODO: transform author into right format
+			content = convertAuthor(content);
 		} else if (property.equals("month")) {
 			content = getMonth(Integer.parseInt(content));
 		} else if (property.equals("pages")) {
 			content = content.replace("--", "&mdash;");
-		} 
+		}
 
 		content = this.convertAccents(content);
 
 		return content;
+	}
+
+	private String convertAuthor(String author)
+	{
+		if(this.style.equals("chicago")) {
+			return "SIM";
+		} else if (this.style.equals("apa"))
+		{
+			return this.style;
+		}
+		return "";
 	}
 
 	public String replaceOnTemplate(String template) {

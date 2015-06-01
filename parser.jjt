@@ -93,7 +93,7 @@ PARSER_BEGIN(Bibtex2Html)
 			}
 
 			Validator validator = new Validator(ids, nodeId, type);
-			Entry entry = new Entry(nodeId, type);
+			Entry entry = new Entry(nodeId, type, style);
 			entries.add(entry);
 			entry.addProperty("id", nodeId);
 			System.out.println(nodeId);
