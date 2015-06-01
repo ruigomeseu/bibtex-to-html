@@ -56,7 +56,11 @@ public class Entry {
 
 	private String convertAuthor(String author)
 	{
+		System.out.println(author);
+		ArrayList<String[]> authors = getAuthors( author );
+
 		if(this.style.equals("chicago")) {
+
 			return "SIM";
 		} else if (this.style.equals("apa"))
 		{
@@ -147,6 +151,88 @@ public class Entry {
 
 
 		return content;
+    }
+
+    private ArrayList<String[]> getAuthors( String authorstring ) { //TODO throw exception
+    	String[] splited = authorstring.split("and");
+    	ArrayList<String[]> output = new ArrayList<String[]>();
+
+    	for(String bibtex_name : authorstring.split("and")){
+    		String[] splitedName;
+    		//Its a First von Last (no commas)
+    		if(!bibtex_name.contains(",")){
+    			splitedName = extractFirstVonLast(bibtex_name.trim());
+    			if(splitedName != null)
+    			System.out.println("First{"+splitedName[0]+"} "
+    				+"Last{"+splitedName[1]+"} "
+    				+"von{"+splitedName[2]+"} "
+    				+"jr{"+splitedName[3]+"}"
+    				);
+    		}else
+    		//The other two cases (w/ commas)
+    		if(true);
+
+
+
+
+    		//output.add(new ArrayList<String>(new));
+    		//System.out.println(bibtex_name.trim());
+    	}
+    	return null;
+    }
+
+    private String[] extractFirstVonLast(String trimmedbibtexname){
+
+    	String[] split_name = trimmedbibtexname.split(" "); //TODO special cases for split in { }
+		/*
+    	//Always need a Last name
+    	char lachar = split_name[split_name.length-1].trim().charAt(0);
+    	if(!Character.isUpperCase(lachar))
+    		System.out.println("invalid author field: No valid 'Last' name in string '"+trimmedbibtexname+"'.");//TODO Throw exception
+		else{*/
+		String lastname = split_name[split_name.length-1].trim();
+		//if the last name is nothing at all then we got a problem..
+		if(lastname.length() < 1){
+			System.out.println("invalid author field: No valid 'Last' name is of size = 0.");//TODO Throw exception
+		}else{
+			String first = "", last= "", von= "";
+			boolean isfirst = true;
+			for(int i=0; i+1 < split_name.length; ++i){
+				String name = split_name[i].trim();
+				if(name.length() > 0){
+					//If first is upper case the is First or Last
+					if( firstIsUpper(name) ){
+						if(isfirst){
+							first += name+" ";
+						}else{
+							last += name+" ";
+						}
+					//if not upper case start von
+					}else{
+						isfirst = false;
+						von += name+" ";
+					}
+				}
+			}
+			//never has JR in this format.
+			//trim all (last+lastname) because last can come empty.
+			return new String[]{first.trim(), (last.trim()+" "+lastname).trim(), von.trim(), ""};
+		}
+    	return null;
+    }
+
+    private String[] extractVonLastFirst(String trimmedbibtexname){
+    	return null;
+    }
+
+    private String[] extractVonLastJrFirst(String trimmedbibtexname){
+    	return null;
+    }
+
+    private boolean firstIsUpper(String trimmedName){
+    	char c = trimmedName.charAt(0);
+		if( Character.isUpperCase(c) || c == '{' ) return true;
+		else return false;
     }
 
 
