@@ -274,7 +274,40 @@ public class Entry {
     }
 
     private String[] extractVonLast_Jr_First(String trimmedbibtexname){
-    	return null;
+    	String first = "", last = "", von = "", jr = "";
+    	boolean isLast = true;
+    	String[] split_commas = splitTrueCommas(trimmedbibtexname);
+
+    	if(split_commas.length != 3)
+    		System.out.println("Invalid author field: String must only have 2 and only 2 comma that are not between brackets. String: "+trimmedbibtexname);//TODO Throw exception
+    	else{
+    		//First name is in the end, after the last comma
+    		first = split_commas[2].trim();
+    		//Jr name is in the middle of the commas
+    		jr = split_commas[1].trim();
+    		//Last and von to be splited
+    		String[] split_name = split_commas[0].split(" "); //TODO special cases for split in { }
+    		//Last name is always existent
+    		last = split_name[split_name.length-1].trim();
+    		if(last.length() < 1){
+				System.out.println("Invalid author field: 'Last' name can't have length of 0.");//TODO Throw exception
+			}else{
+				for(int i=split_name.length-2; 0 <= i; --i){
+					String name = split_name[i].trim();
+					if(name.length() > 0){
+						//If is upper case and isLast
+						if( firstIsUpper(name) && isLast){	
+							last = name+" "+last;
+						}else{
+						//if not upper case start von and isLast=false
+							isLast = false;
+							von = name + " " + von;
+						}
+					}
+				}
+			}
+    	}
+		return new String[]{first, last.trim(), von.trim(), jr};
     }
 
     private boolean firstIsUpper(String trimmedName){
