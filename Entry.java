@@ -56,6 +56,7 @@ public class Entry {
 
 	private String convertAuthor(String author)
 	{
+		System.out.println();
 		System.out.println(author);
 		ArrayList<String[]> authors = getAuthors( author );
 
@@ -154,27 +155,49 @@ public class Entry {
     }
 
     private ArrayList<String[]> getAuthors( String authorstring ) { //TODO throw exception
-    	String[] splited = authorstring.split("and");
     	ArrayList<String[]> output = new ArrayList<String[]>();
 
-    	for(String bibtex_name : authorstring.split("and")){
+    	for(String bibtex_name : authorstring.split(" and ")){
     		String[] splitedName;
-    		//Its a First von Last (no commas)
-    		if(!bibtex_name.contains(",")){
+    		int commas_nmr = countTrueCommas(bibtex_name);
+    		switch(commas_nmr){
+    		//Its a First von Last (no commas).
+    		case 0:{
     			splitedName = extractFirstVonLast(bibtex_name.trim());
     			if(splitedName != null)
-    			System.out.println("First{"+splitedName[0]+"} "
+    			System.out.println("CASE1: First{"+splitedName[0]+"} "
     				+"Last{"+splitedName[1]+"} "
     				+"von{"+splitedName[2]+"} "
     				+"jr{"+splitedName[3]+"}"
     				);
-    		}else
-    		//The other two cases (w/ commas)
-    		if(true);
-
-
-
-
+    			}
+    			break;
+    		//It's the 'von Last, First' case.
+    		case 1:{
+    			splitedName = extractVonLast_First(bibtex_name.trim());
+    			if(splitedName != null)
+    			System.out.println("CASE2: First{"+splitedName[0]+"} "
+    				+"Last{"+splitedName[1]+"} "
+    				+"von{"+splitedName[2]+"} "
+    				+"jr{"+splitedName[3]+"}"
+    				);
+    			}
+    			break;
+    		//It's the 'von Last, Jr, First' case.
+    		case 2:{
+    			splitedName = extractVonLast_Jr_First(bibtex_name.trim());
+    			if(splitedName != null)
+    			System.out.println("CASE3: First{"+splitedName[0]+"} "
+    				+"Last{"+splitedName[1]+"} "
+    				+"von{"+splitedName[2]+"} "
+    				+"jr{"+splitedName[3]+"}"
+    				);
+    			}
+    			break;
+    		default:
+    			//ERROR cannot have more than 2 commas?
+    			break;
+    		}
     		//output.add(new ArrayList<String>(new));
     		//System.out.println(bibtex_name.trim());
     	}
@@ -182,50 +205,75 @@ public class Entry {
     }
 
     private String[] extractFirstVonLast(String trimmedbibtexname){
-
-    	String[] split_name = trimmedbibtexname.split(" "); //TODO special cases for split in { }
-		/*
-    	//Always need a Last name
-    	char lachar = split_name[split_name.length-1].trim().charAt(0);
-    	if(!Character.isUpperCase(lachar))
-    		System.out.println("invalid author field: No valid 'Last' name in string '"+trimmedbibtexname+"'.");//TODO Throw exception
-		else{*/
+    	String[] split_name = trimmedbibtexname.split(" "); //TODO special cases for split in { } and the '~' and '-'
 		String lastname = split_name[split_name.length-1].trim();
+		String first = "", last= "", von= "";
+		boolean isFirst = true;
 		//if the last name is nothing at all then we got a problem..
 		if(lastname.length() < 1){
-			System.out.println("invalid author field: No valid 'Last' name is of size = 0.");//TODO Throw exception
+			System.out.println("invalid author field: No valid 'Last' name is of size 0.");//TODO Throw exception
 		}else{
-			String first = "", last= "", von= "";
-			boolean isfirst = true;
 			for(int i=0; i+1 < split_name.length; ++i){
 				String name = split_name[i].trim();
 				if(name.length() > 0){
 					//If first is upper case the is First or Last
 					if( firstIsUpper(name) ){
-						if(isfirst){
+						if(isFirst){
 							first += name+" ";
 						}else{
 							last += name+" ";
 						}
 					//if not upper case start von
 					}else{
-						isfirst = false;
+						isFirst = false;
 						von += name+" ";
 					}
 				}
 			}
-			//never has JR in this format.
-			//trim all (last+lastname) because last can come empty.
-			return new String[]{first.trim(), (last.trim()+" "+lastname).trim(), von.trim(), ""};
 		}
-    	return null;
+		//never has JR in this format.
+		//trim all (last+lastname) because last can come empty.
+    	return new String[]{first.trim(), (last.trim()+" "+lastname).trim(), von.trim(), ""};
     }
 
-    private String[] extractVonLastFirst(String trimmedbibtexname){
-    	return null;
+    private String[] extractVonLast_First(String trimmedbibtexname){
+    	String first = "", last= "", von= "";
+    	boolean isLast = true;
+		String[] split_commas = splitTrueCommas(trimmedbibtexname);
+
+    	if(split_commas.length != 2)
+    		System.out.println("Invalid author field: String must only have 1 and only 1 comma that is not between brackets. String: "+trimmedbibtexname);//TODO Throw exception
+    	else{
+    		//First name is in the end, after the comma
+    		first = split_commas[1].trim();
+    		//Last and von to be splited
+    		String[] split_name = split_commas[0].split(" "); //TODO special cases for split in { }
+    		//Last name is always existent
+    		last = split_name[split_name.length-1].trim();
+
+    		if(last.length() < 1){
+				System.out.println("Invalid author field: 'Last' name can't have length of 0.");//TODO Throw exception
+			}else{
+				for(int i=split_name.length-2; 0 <= i; --i){
+					String name = split_name[i].trim();
+					if(name.length() > 0){
+						//If is upper case and isLast
+						if( firstIsUpper(name) && isLast){	
+							last = name+" "+last;
+						}else{
+						//if not upper case start von and isLast=false
+							isLast = false;
+							von = name + " " + von;
+						}
+					}
+				}
+			}
+		}
+		//never has JR in this format.
+    	return new String[]{first.trim(), last.trim(), von.trim(), ""};
     }
 
-    private String[] extractVonLastJrFirst(String trimmedbibtexname){
+    private String[] extractVonLast_Jr_First(String trimmedbibtexname){
     	return null;
     }
 
@@ -233,6 +281,58 @@ public class Entry {
     	char c = trimmedName.charAt(0);
 		if( Character.isUpperCase(c) || c == '{' ) return true;
 		else return false;
+    }
+
+    //true commas are the ones NOT in between brackets
+    private int countTrueCommas(String text){
+    	int inbrkts = 0, commas = 0;
+    	for(char c : text.toCharArray()){
+    		switch(c){
+			case '{':
+    			inbrkts++;
+    			break;
+			case '}':
+    			inbrkts++;
+    			break;
+    		case ',':
+    			if(inbrkts == 0) commas++;
+    			break;
+    		default:
+    		break;
+    		}
+    	}
+    	return commas;
+    }
+
+    //true commas are the ones NOT in between brackets
+	private String[] splitTrueCommas(String text){
+    	int inbrkts = 0, lastcut = -1;
+    	ArrayList<String> output = new ArrayList<String>();
+    	char[] charray = text.toCharArray();
+    	for(int i = 0; i < text.length(); ++i){
+    		switch(text.charAt(i)){
+			case '{':
+    			++inbrkts;
+    			break;
+			case '}':
+    			if(inbrkts >= 0) --inbrkts;
+    			else ;//TODO throws error? or returns -1. '}' was found more times than '{'
+    			break;
+    		case ',':
+    			if(inbrkts == 0){
+    				if(i!=0) output.add(text.substring(lastcut+1,i) );
+    				else output.add("");
+    				lastcut = i+1;
+    			}
+    			break;
+    		default:
+    		break;
+    		}
+    	}
+    	output.add(text.substring(lastcut+1,text.length() ) );
+
+    	//for(String s : output) System.out.println("split: '"+s+"'");
+    	return output.toArray(new String[output.size()]);
     }
 
 
