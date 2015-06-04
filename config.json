@@ -4,5 +4,9 @@
 	"template_path": "./templates/",
 	"master_template": "template.html",
 	"output_file": "./html/entries.html",
+<<<<<<< HEAD
 	"bibtex_file": "./bibtex.txt"
+=======
+	"bibtexFile": "./validbibtex.txt"
+>>>>>>> origin/master
 }
