@@ -49,6 +49,7 @@ public class Entry {
 			content = content.replace("--", "&mdash;");
 		}
 
+		//FIXME author is purified, no need to convertAccents.
 		content = this.convertAccents(content);
 
 		return content;
@@ -56,13 +57,17 @@ public class Entry {
 
 	private String convertAuthor(String author)
 	{
-		System.out.println();
-		System.out.println(author);
+		String author_s = "";
 		ArrayList<String[]> authors = getAuthors( author );
+		//NOTE: String[x] [0]=first, [1]=last, [2]=von, [3]=jr
 
 		if(this.style.equals("chicago")) {
-
-			return "SIM";
+			boolean first = true;
+			for(String[] a : authors){
+				if(first) author_s = a[1]+", "+a[0];
+				else author_s += ", "+a[0]+" "+a[1];
+			}
+			return author_s;
 		} else if (this.style.equals("apa"))
 		{
 			return this.style;
@@ -162,46 +167,26 @@ public class Entry {
     		int commas_nmr = countTrueCommas(bibtex_name);
     		switch(commas_nmr){
     		//Its a First von Last (no commas).
-    		case 0:{
+    		case 0:
     			splitedName = extractFirstVonLast(bibtex_name.trim());
-    			if(splitedName != null)
-    			System.out.println("CASE1: First{"+splitedName[0]+"} "
-    				+"Last{"+splitedName[1]+"} "
-    				+"von{"+splitedName[2]+"} "
-    				+"jr{"+splitedName[3]+"}"
-    				);
-    			}
+    			if(splitedName != null) output.add(splitedName);
     			break;
     		//It's the 'von Last, First' case.
-    		case 1:{
+    		case 1:
     			splitedName = extractVonLast_First(bibtex_name.trim());
-    			if(splitedName != null)
-    			System.out.println("CASE2: First{"+splitedName[0]+"} "
-    				+"Last{"+splitedName[1]+"} "
-    				+"von{"+splitedName[2]+"} "
-    				+"jr{"+splitedName[3]+"}"
-    				);
-    			}
+    			if(splitedName != null) output.add(splitedName);
     			break;
     		//It's the 'von Last, Jr, First' case.
-    		case 2:{
+    		case 2:
     			splitedName = extractVonLast_Jr_First(bibtex_name.trim());
-    			if(splitedName != null)
-    			System.out.println("CASE3: First{"+splitedName[0]+"} "
-    				+"Last{"+splitedName[1]+"} "
-    				+"von{"+splitedName[2]+"} "
-    				+"jr{"+splitedName[3]+"}"
-    				);
-    			}
+    			if(splitedName != null) output.add(splitedName);
     			break;
     		default:
     			//ERROR cannot have more than 2 commas?
     			break;
     		}
-    		//output.add(new ArrayList<String>(new));
-    		//System.out.println(bibtex_name.trim());
     	}
-    	return null;
+    	return output;
     }
 
     private String[] extractFirstVonLast(String trimmedbibtexname){
@@ -233,7 +218,7 @@ public class Entry {
 		}
 		//never has JR in this format.
 		//trim all (last+lastname) because last can come empty.
-    	return new String[]{first.trim(), (last.trim()+" "+lastname).trim(), von.trim(), ""};
+    	return new String[]{purify(first), purify(last.trim()+" "+lastname), purify(von), ""};
     }
 
     private String[] extractVonLast_First(String trimmedbibtexname){
@@ -270,7 +255,7 @@ public class Entry {
 			}
 		}
 		//never has JR in this format.
-    	return new String[]{first.trim(), last.trim(), von.trim(), ""};
+    	return new String[]{ purify(first), purify(last), purify(von), "" };
     }
 
     private String[] extractVonLast_Jr_First(String trimmedbibtexname){
@@ -307,7 +292,7 @@ public class Entry {
 				}
 			}
     	}
-		return new String[]{first, last.trim(), von.trim(), jr};
+		return new String[]{purify(first), purify(last), purify(von), purify(jr)};
     }
 
     private boolean firstIsUpper(String trimmedName){
@@ -364,10 +349,60 @@ public class Entry {
     	}
     	output.add(text.substring(lastcut+1,text.length() ) );
 
-    	//for(String s : output) System.out.println("split: '"+s+"'");
     	return output.toArray(new String[output.size()]);
     }
 
+    /**
+     * Cleans each String in array using purify(String.
+     * @return a clean String array free of brackets and special characters
+     *
+     */
+    private String[] purify(String[] unpure_text_array){
+    	if(unpure_text_array != null){
+    		for(int i=0; i<unpure_text_array.length; ++i){
+    			unpure_text_array[i] = purify(unpure_text_array[i]);
+    		}
+    	}
+    	return unpure_text_array;
+    }
 
+	/**
+     * The cleaning consists in trimming, then replacing special
+     * characters and then removing the brackets between words in each string in this order.
+     * @return a clean String trimmed and free of brackets and special characters
+     */
+    private String purify(String unpure){
+    	if(unpure != null || !unpure.equals("")){
+			unpure = convertAccents(unpure.trim());
+			//TODO replace only the ones outside a pair of brackets
+			unpure = unpure.replaceAll("\\{","").replaceAll("\\}","");
+		}
+		return unpure;
+	}
+
+	/*
+	private String removeOutsideBrackets(String bracketed){
+		StringBuffer unbracketed = new StringBuffer();
+		boolean inside = false;
+		for(int i=0; i<bracketed.length; ++i){
+			char currentChar = bracketed.charAt(i);
+			switch(currentChar){
+			case '}':
+				if()
+				if(inside)
+			case '{':
+				if(inside) unbracketed.append(currentChar);
+				else inside = true;
+			}
+
+
+			if(currentChar = '{' && !inside) inside = true;
+			else{
+
+			} unbracketed.append(currentChar);
+
+		}
+		return unbracketed;
+	}*/
 
 }
