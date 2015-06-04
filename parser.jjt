@@ -39,19 +39,14 @@ PARSER_BEGIN(Bibtex2Html)
 				Bibtex2Html parser = new Bibtex2Html(new FileInputStream(bibtexFile));
 				SimpleNode node = parser.Parse();
 				node.dump("");
-				try {
-					parser.eval(node, "ids");
-					parser.eval(node, "semantic");
-				} catch (Exception e) {
-					System.out.println("\n############### F A T A L E X C E P T I O N ###############\n");
-					System.out.println("A fatal exception was thrown.");
-					System.out.println(e.getMessage());
-					return;
-				}
-			} catch(java.io.FileNotFoundException e) {
-          		System.out.println ("File not found.");
-          		return;
-        	} 
+				parser.eval(node, "ids");
+				parser.eval(node, "semantic");      
+			} catch (Exception e) {
+				System.out.println("\n############### F A T A L E X C E P T I O N ###############\n");
+				System.out.println("A fatal exception was thrown.");
+				System.out.println(e.getMessage());
+				return;
+			}
 
 			String allEntries = "";
 			String entryHtmlTemplate = readFile(templatesPath + style + ".html", Charset.defaultCharset());
@@ -280,9 +275,17 @@ SimpleNode Parse(): {} {
 }
 
 void ParseEntry(): {} {
-	EntryType()
-	Contents()
-	(<LF>)*
+	try {
+		EntryType()
+		Contents()
+		(<LF>)*
+	} catch(ParseException e) {
+		System.out.println("\n##### An error occurred while parsing the input file. #####\n");
+		System.out.println(e.getMessage() + "\n");
+	} catch(TokenMgrError e) {
+		System.out.println("\n##### An error occurred while parsing the input file. #####\n");
+		System.out.println(e.getMessage() + "\n");
+	}
 }
 
 void EntryType(): {} {
