@@ -11,11 +11,12 @@
 
 
 @book{adcox2005formation,
-  title={Formation of a dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
-  author={Jean {de} Carlos, Melo {Nome} Sjod},
+  title={Formation of a dense partonic matter in relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
+  author={Jean {de} Carlos, Melo Sjod},
   volume={757},
   year={2005},
-  publisher={Elsevier},
+  publisher={Elsevier Publishers},
+  address={Los Angeles}
 }
 
 @article{small,
@@ -48,10 +49,9 @@ note = {This is not an official paper}
  title = {A vida de um Carlos},
  booktitle = {Um Carlos},
  chapter = {Um Abraco},
- author = { \AE Kappa},
+ author = {J. Vasconcelos and A. Fernandes},
  pages = {330--331},
- publisher = {The Dream Inc.},
+ publisher = {The Dream Inc},
  year=2014,
- volume=1,
  month = 1
 }

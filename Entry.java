@@ -70,7 +70,7 @@ public class Entry {
 			return author_s;
 		} else if (this.style.equals("apa"))
 		{
-			return this.style;
+			return author;
 		}
 		return "";
 	}

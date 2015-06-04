@@ -31,7 +31,7 @@ PARSER_BEGIN(Bibtex2Html)
 			strictMode = config.getBoolean("strict");
 			String templatesPath = config.getString("template_path");
 			String outputHtmlFile = config.getString("output_file");
-			String bibtexFile = config.getString("bibtexFile");
+			String bibtexFile = config.getString("bibtex_file");
 
 			System.out.println("Strict mode: " + strictMode);
 			
