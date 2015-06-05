@@ -57,6 +57,7 @@ PARSER_BEGIN(Bibtex2Html)
 
         	String masterTemplate = readFile(templatesPath + "template.html", Charset.defaultCharset());
         	masterTemplate = masterTemplate.replace("{{ENTRIES}}", allEntries);
+        	masterTemplate = masterTemplate.replace("{{CROSSREF}}", "");
 			
 
 			Path path = Paths.get(outputHtmlFile);

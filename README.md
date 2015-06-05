@@ -79,7 +79,7 @@ Each entry will be inserted into the appropriate place in the style template (e.
 
 ## Feature Set
 
-Fully functional HTML templates generation, which are W3C valid and use Bootstrap for styling.
+Fully functional HTML templates generation. The default template was fully W3C validated and loads Bootstrap from a CDN to style the BibTeX entries.
 
 Easily configurable using a JSON file.
 
