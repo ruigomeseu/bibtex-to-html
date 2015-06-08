@@ -265,7 +265,7 @@ TOKEN :
 	| < BETWEENQUOTES : ( <QUOTE> (<WORD>|<STRING>)* <QUOTE> )+ >
 
 	| < TEXT : (
-		( <STRING> | <WORD> | <WS> )+ ( <BETWEENBRACKETS> )+ ( <STRING> | <WORD>  | <WS> )+
+		( <STRING> | <WORD> | <WS> )+ (( <BETWEENBRACKETS> )+ ( <STRING> | <WORD>  | <WS> )+ )+
 		)+  >
 
 }
