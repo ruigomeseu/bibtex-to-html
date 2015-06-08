@@ -67,10 +67,53 @@ public class Entry {
 				if(first) author_s = a[1]+", "+a[0];
 				else author_s += ", "+a[0]+" "+a[1];
 			}
+			//System.out.println(getInitials(author_s));
 			return author_s;
+
 		} else if (this.style.equals("apa"))
 		{
-			return author;
+			//Works by a single author should list the author's last name and initials
+			int asize = authors.size();
+			//one author
+			if(asize == 1){
+				String[] atemp = authors.get(0);
+				if(atemp[1] != null && atemp[0] != null){
+					author_s = atemp[1]+", "+getInitials(atemp[0]);
+					return author_s;
+				}
+			}else //two authors
+			if(asize == 2){
+				String[] atemp1 = authors.get(0);
+				String[] atemp2 = authors.get(0);
+				if(atemp1[1] != null && atemp2[1] != null){
+					author_s = atemp1[1];
+					if(atemp1[0]!=null) author_s += ", "+getInitials(atemp1[0]);
+					author_s +=" & "+atemp2[1];
+					if(atemp2[0]!=null) author_s += ", "+getInitials(atemp2[0]);
+					return author_s;
+				}
+			}else //more than two (with more than seven)
+			if( asize > 2){
+				boolean first = true;
+				int count = 0;
+				for(String[] a : authors){
+					if(count == 7){
+						author_s += ",...";
+						return author_s;
+					}
+					if(count != asize-1){
+						if(!first) author_s += ", ";
+						else first = false;
+						author_s += a[1];
+						if(a[0]!=null) author_s +=", "+getInitials(a[0]);
+					}else{
+						author_s += ", & "+a[1];
+						if(a[0]!=null) author_s +=", "+getInitials(a[0]);
+					}
+					++count;
+				}
+				return author_s;
+			}
 		}
 		return "";
 	}
@@ -378,6 +421,22 @@ public class Entry {
 			unpure = unpure.replaceAll("\\{","").replaceAll("\\}","");
 		}
 		return unpure;
+	}
+
+	private String getInitials(String text){
+		String out = "";
+		boolean in_name = false;
+		for(char c : text.toCharArray()){
+			if(c != ' '){
+				if(!in_name){
+					in_name = true;
+					out += c+". ";
+				}
+			}else{
+				in_name = false;
+			}
+		}
+		return out.trim();
 	}
 
 	/*
