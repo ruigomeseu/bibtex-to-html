@@ -63,12 +63,34 @@ public class Entry {
 		String author_s = "";
 		ArrayList<String[]> authors = getAuthors( author );
 		//NOTE: String[x] [0]=first, [1]=last, [2]=von, [3]=jr
-
+		int asize = authors.size();
+		int count = 0;
 		if(this.style.equals("chicago")) {
 			boolean first = true;
 			for(String[] a : authors){
-				if(first) author_s = a[1]+", "+a[0];
-				else author_s += ", "+a[0]+" "+a[1];
+				++count;
+				if(first){
+					first = false;
+					author_s = a[1]+", "+a[0];
+				}
+				else{
+					if(asize > 10){
+					//et al. case, include only 7 authors
+						author_s += ", "+a[0]+" "+a[1];
+						if(count == 7){
+							author_s += " et al";
+							return author_s;
+						}
+					}else{
+					//less than 10 authors, include all
+						if (asize == count){
+							author_s += " and "+a[0]+" "+a[1];
+							return author_s;
+						}else{
+							author_s += ", "+a[0]+" "+a[1];
+						}
+					}
+				}
 			}
 			//System.out.println(getInitials(author_s));
 			return author_s;
@@ -76,7 +98,6 @@ public class Entry {
 		} else if (this.style.equals("apa"))
 		{
 			//Works by a single author should list the author's last name and initials
-			int asize = authors.size();
 			//one author
 			if(asize == 1){
 				String[] atemp = authors.get(0);
@@ -98,7 +119,6 @@ public class Entry {
 			}else //more than two (with more than seven)
 			if( asize > 2){
 				boolean first = true;
-				int count = 0;
 				for(String[] a : authors){
 					if(count == 7){
 						author_s += ",...";
