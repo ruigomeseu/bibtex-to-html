@@ -9,22 +9,67 @@
   crossref = {adcox2005formation},
 }
 
+@book{Torre2008,
+ author="Joe Torre and Tom Verducci",
+ publisher="Doubleday",
+ title="The Yankee Years",
+ year=2008,
+ note={In response to the criticism, Torre said he was proud of the book and he did not violate the sanctity of the clubhouse}
+}
 
-@book{adcox2005formation,
-  title={Formation of \'{a} dense partonic matter in, relativistic nucleus collisions at {RHIC} Experimental evaluation by the PHENIX Collaboration},
-  author={Jean {de} Carlos, Melo {Nome} Sjod},
-  volume={757},
-  year={2005},
-  publisher={Elsevier},
+@techreport{instance1290,
+	title = {Mobile Systems IV},
+	author = {Burkhard Stiller and Thomas Bocek and Fabio Hecht and Guilherme Machado and Peter Racz and Martin Waldburger},
+	group = {CS Group},
+	year = 2010,
+	institution = {University of Zurich, Department of Informatics},
+}
+
+@phdthesis{hartrumpf02,
+author = {Sven Hartrumpf},
+title = {Hybrid Disambiguation in Natural Language Analysis},
+school = {FernUniversit{\"a}t Hagen, Fachbereich Informatik},
+year = 2002,
+address = {Hagen, Germany},
+}
+
+@inproceedings{Huetal2000,
+	author = "J. Hu and X. Wang",
+	title = "Fast and robust equalization: A case study",
+	booktitle = "Proceedings of the World Multiconference on Systemics, Cybernetics and Informatics, (SCI 2000), Florida, USA, 23-26 July 2000",
+	publisher = "International Institute of Informatics and Systemics",
+	address = "FL, USA",
+	pages = "398--403",
+	year =2000
+}
+
+@manual{AmSLaTeX,
+   author={American Mathematical Society},
+   title={Version 1.2 User's Guide},
+   year=1995,
+   note={Filename is not available},
+}
+
+@misc{patashnik-bibtexing,
+	author={Oren Patashnik},
+	title={BIBTEXing},
+	year=1988
+}
+
+@proceedings{conference:06,
+ editor={Charlie Gruhm},
+ title={Proceedings of the 4th Conference on Greengrass University},
+ booktitle={Conference for Example},
+ year=2006,
 }
 
 @article{small,
-author = {Freely, I.P.},
+author = {Freely, I. Potter},
 title = {A small paper},
 journal = {The journal of small papers},
 year = 1997,
 volume = {1},
-note = {to appear}
+note = {this is a small paper}
 }
 @article{guth1981inflationary,
   title={Inflationary universe: A possible solution to the horizon and flatness problems},
@@ -35,13 +80,18 @@ note = {to appear}
   pages={347},
   year={1981},
 }
-
+@book{adcox2005formation,
+  title={Formation of \'{a} dense partonic matter in, relativistic nucleus collisions at Experimental evaluation by the PHENIX Collaboration},
+  author={Jean Carlos, Melo Sjod},
+  volume={757},
+  year={2005},
+  publisher={Elsevier Publishers},
+}
 
 
 @article{carlos:14,
- title = {A vida de Carlos 14},
- author = {An Author},
- pages = {330--331},
+ title = {A vida de Carlos},
+ author = {Francisco Vasconcelos},
  year=2014,
  volume=1,
  journal={Sim}
