@@ -144,6 +144,8 @@ PARSER_BEGIN(Bibtex2Html)
 					entry.addProperty(property, content);
 				} catch(InvalidPropertyException e) {
 					this.handleException(e);
+				} catch(DuplicatePropertyException e) {
+					this.handleException(e);
 				}
 			}
 
@@ -284,6 +286,9 @@ void ParseEntry(): {} {
 		System.out.println("\n##### An error occurred while parsing the input file. #####\n");
 		System.out.println(e.getMessage() + "\n");
 	} catch(TokenMgrError e) {
+		System.out.println("\n##### An error occurred while parsing the input file. #####\n");
+		System.out.println(e.getMessage() + "\n");
+	} catch(Exception e) {
 		System.out.println("\n##### An error occurred while parsing the input file. #####\n");
 		System.out.println(e.getMessage() + "\n");
 	}

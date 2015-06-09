@@ -39,22 +39,22 @@ Use the `strict` parameter as true if you want fatal exceptions to be thrown.
 
 ### Available examples
 
-* `examples/lexical-bibtex.txt` - An example of a lexical error.
-* `examples/syntactic-bibtex.txt` - An example of a syntatic error.
-* `examples/semantic-bibtex.txt` - An example of a semantic error.
+* `examples/lexical-error.txt` - An example of a lexical error. The "invalid" type does not exist.
+* `examples/syntactic-error.txt` - An example of a syntatic error. The "title" property can't be an integer.
+* `examples/semantic-error.txt` - An example of a semantic error. The "author" property is duplicated and there are missing required properties.
 * `examples/valid-bibtex.txt` - A valid BibTeX file.
 
 ## Lexical Analysis
 
-The lexical analysis is performed in the `parser.jjt` file. If the parser finds any lexical error it will stop the tree parsing and print an error to the console.
+The lexical analysis is performed in the `parser.jjt` file. If the parser finds any lexical error it will stop parsing the tree and print an error to the console.
 
 ## Syntatic Analysis
 
-The syntatic analysis is also performed in the `parser.jjt` file. If the parser finds any syntatical error it will stop the tree parsing and print an error to the console.
+The syntatic analysis is also performed in the `parser.jjt` file. If the parser finds any syntatical error it will stop parsing the tree and print an error to the console.
 
 ## Sematic Analysis
 
-The nodes tree is evaluated twice in the `parser.jjt` file which then passes the properties of each BibTeX entry to the `Validator.java` class. In this class the following semantic errors:
+The nodes tree is evaluated twice in the `parser.jjt` file which then passes the properties of each BibTeX entry to the `Validator.java` class. In this class the following semantic errors are detected:
 
 * Invalid pages order
 * Nonexistent cross reference
