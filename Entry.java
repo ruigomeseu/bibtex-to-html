@@ -84,11 +84,11 @@ public class Entry {
 			}else //two authors
 			if(asize == 2){
 				String[] atemp1 = authors.get(0);
-				String[] atemp2 = authors.get(0);
+				String[] atemp2 = authors.get(1);
 				if(atemp1[1] != null && atemp2[1] != null){
 					author_s = atemp1[1];
 					if(atemp1[0]!=null) author_s += ", "+getInitials(atemp1[0]);
-					author_s +=" & "+atemp2[1];
+					author_s +=", & "+atemp2[1];
 					if(atemp2[0]!=null) author_s += ", "+getInitials(atemp2[0]);
 					return author_s;
 				}
