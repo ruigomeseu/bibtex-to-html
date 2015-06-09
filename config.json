@@ -1,8 +1,8 @@
 {
 	"strict": true,
-	"style": "chicago",
+	"style": "apa",
 	"template_path": "./templates/",
 	"master_template": "template.html",
-	"output_file": "./output/chicago.html",
+	"output_file": "./output/apa.html",
 	"bibtex_file": "./examples/valid-bibtex.txt"
 }
