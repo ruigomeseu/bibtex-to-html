@@ -20,7 +20,6 @@
 @techreport{instance1290,
 	title = {Mobile Systems IV},
 	author = {Burkhard Stiller and Thomas Bocek and Fabio Hecht and Guilherme Machado and Peter Racz and Martin Waldburger},
-	group = {CS Group},
 	year = 2010,
 	institution = {University of Zurich, Department of Informatics},
 }
@@ -28,7 +27,7 @@
 @phdthesis{hartrumpf02,
 author = {Sven Hartrumpf},
 title = {Hybrid Disambiguation in Natural Language Analysis},
-school = {FernUniversit{\"a}t Hagen, Fachbereich Informatik},
+school = {FernUniversit\"{a}t Hagen, Fachbereich Informatik},
 year = 2002,
 address = {Hagen, Germany},
 }
@@ -39,7 +38,7 @@ address = {Hagen, Germany},
 	booktitle = "Proceedings of the World Multiconference on Systemics, Cybernetics and Informatics, (SCI 2000), Florida, USA, 23-26 July 2000",
 	publisher = "International Institute of Informatics and Systemics",
 	address = "FL, USA",
-	pages = "398--403",
+	pages = 398--403,
 	year =2000
 }
 
@@ -59,7 +58,6 @@ address = {Hagen, Germany},
 @proceedings{conference:06,
  editor={Charlie Gruhm},
  title={Proceedings of the 4th Conference on Greengrass University},
- booktitle={Conference for Example},
  year=2006,
 }
 

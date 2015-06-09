@@ -95,7 +95,6 @@ PARSER_BEGIN(Bibtex2Html)
 			Entry entry = new Entry(nodeId, type, style);
 			entries.add(entry);
 			entry.addProperty("id", nodeId);
-			System.out.println(nodeId);
 
 			//Loop over the contents tree and update the hashmap with the property status (FOUND)
 			for (int i = 1; i < node.jjtGetNumChildren(); i++) {
@@ -109,7 +108,11 @@ PARSER_BEGIN(Bibtex2Html)
 
 				//Validate pages
 				if (property.equals("pages")) {
-					SimpleNode pagesValue = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0);
+					SimpleNode pagesValue = (SimpleNode) node.jjtGetChild(i).jjtGetChild(0);
+					if(pagesValue.jjtGetNumChildren() > 0)
+					{
+						pagesValue = (SimpleNode) pagesValue.jjtGetChild(0);
+					}
 					try {
 						validator.validatePages(pagesValue.contentValue);
 					} catch(PagesOrderException e) {
@@ -261,7 +264,7 @@ TOKEN :
 	| < WORD : (["a" - "z" , "A"-"Z" , "0" - "9", "-", ":"] | <SPECIAL>)+ >
 	
 	// \, 47 = / , u2018 = ‘ , u2019 = ’ , 126 = , u002E = . , 61 =  , u005E = ^
-	| < SPECIAL : (["\'", "\"", "\u007E", "\\", "\47", "\u2018", "\u2019", "\126", "\u002E", "\61", "\u005E", "\u0060"])+ >
+	| < SPECIAL : (["\u002d", "\'", "\"", "\u007E", "\\", "\47", "\u2018", "\u2019", "\126", "\u002E", "\61", "\u005E", "\u0060", "\u0028", "\u0029"])+ >
 	| < STRING : ((<WORD>)+((" "|", ")+<WORD>)*)+ >
 	| < BETWEENBRACKETS : ( <OPEN_BRACKET> (<WORD>|<STRING>)* <CLOSE_BRACKET> )+ >
 	| < BETWEENQUOTES : ( <QUOTE> (<WORD>|<STRING>)* <QUOTE> )+ >
@@ -504,8 +507,7 @@ void Pages(): {Token pages = null;} {
 
 	<PAGES> [<WS>] <EQUAL> [<WS>]
 	(
-		<OPEN_BRACKET> [<WS>] pages = <PAGESNUMBERS> [<WS>] <CLOSE_BRACKET>
-		| pages = <PAGESNUMBERS>
+		pages = <PAGESNUMBERS>
 		| pages = btwBrackets()
 	)
 	{ jjtThis.contentValue = pages.image + ""; }
