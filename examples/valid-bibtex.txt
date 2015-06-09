@@ -5,7 +5,7 @@
   number={2},
   pages={1--129},
   year=2000,
-  journal={sim},
+  journal={The Melatious Journal},
   crossref = {adcox2005formation},
 }
 
@@ -30,12 +30,13 @@ title = {Hybrid Disambiguation in Natural Language Analysis},
 school = {FernUniversit\"{a}t Hagen, Fachbereich Informatik},
 year = 2002,
 address = {Hagen, Germany},
+month = 1,
 }
 
 @inproceedings{Huetal2000,
 	author = "J. Hu and X. Wang",
 	title = "Fast and robust equalization: A case study",
-	booktitle = "Proceedings of the World Multiconference on Systemics, Cybernetics and Informatics, (SCI 2000), Florida, USA, 23-26 July 2000",
+	booktitle = "Proceedings of the World Multiconference on Systemics, Cybernetics and Informatics",
 	publisher = "International Institute of Informatics and Systemics",
 	address = "FL, USA",
 	pages = 398--403,
