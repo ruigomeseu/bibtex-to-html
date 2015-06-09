@@ -35,6 +35,9 @@ public class Entry {
 		if(property.charAt(0) == '{') {
 			property = property.substring(1, property.length() - 1);
 		}
+		if(property.charAt(0) == '"') {
+			property = property.substring(1, property.length() - 1);
+		}
 
 		return property;
 	}
